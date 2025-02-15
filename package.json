@@ -4,7 +4,10 @@
   "description": "reportin id camp challenges",
   "main": "index.js",
   "scripts": {
-    "test": "-"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app/server.js",
+    "migrate": "sequelize-cli db:migrate",
+    "create-migrate": "sequelize-cli model:generate --name"
   },
   "repository": {
     "type": "git",
@@ -18,5 +21,19 @@
   "bugs": {
     "url": "https://github.com/zainalsaputra/reportin-app-backend/issues"
   },
-  "homepage": "https://github.com/zainalsaputra/reportin-app-backend#readme"
+  "homepage": "https://github.com/zainalsaputra/reportin-app-backend#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.1",
+    "globals": "^15.15.0",
+    "nodemon": "^3.1.9"
+  }
 }

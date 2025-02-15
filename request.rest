@@ -1,0 +1,70 @@
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/courses
+
+
+###
+POST http://localhost:3000/courses
+Content-Type: application/json
+
+{
+    "name" : "Informatika 2023",
+    "beforeTime" : "210703",
+    "afterTime" : "68290298",
+    "session" : "62812"
+}
+
+###
+GET http://localhost:3000/courses/c1665ed5-56de-4301-8d3c-9e4e9b19c9e8
+
+###
+DELETE  http://localhost:3000/courses/0cb876fd-440a-4cfe-a081-e765c45a2a2f
+
+###
+POST http://localhost:3000/courses
+Content-Type: application/json
+
+{
+    "name" : "Informatika 2023",
+    "beforeTime" : "210703",
+    "afterTime" : "68290298",
+    "session" : "62812"
+}
+
+###
+GET http://localhost:3000/courses/f24aecda-af9b-49f4-87cb-33f105fde8d1
+
+###
+POST http://localhost:3000/courses
+Content-Type: application/json
+
+{
+    "name" : "Informatika 2023",
+    "beforeTime" : "210703",
+    "afterTime" : "68290298",
+    "session" : "62812"
+}
+
+###
+PUT http://localhost:3000/courses/f24aecda-af9b-49f4-87cb-33f105fde8d1
+Content-Type: application/json
+
+{
+    "name" : "Informatika 2023",
+    "beforeTime" : "210703",
+    "afterTime" : "68290298",
+    "session" : "62812"
+}
+
+###
+PUT http://localhost:3000/courses/c1665ed5-56de-4301-8d3c-9e4e9b19c9e8
+Content-Type: application/json
+
+{
+    "name" : "Kedokteran 2021",
+    "beforeTime" : "54322",
+    "afterTime" : "98323490",
+    "session" : "342341"
+}
+
