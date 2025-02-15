@@ -1,0 +1,22 @@
+{
+  "name": "reportin-app-backend",
+  "version": "1.0.0",
+  "description": "reportin id camp challenges",
+  "main": "index.js",
+  "scripts": {
+    "test": "-"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zainalsaputra/reportin-app-backend.git"
+  },
+  "keywords": [
+    "success"
+  ],
+  "author": "-",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zainalsaputra/reportin-app-backend/issues"
+  },
+  "homepage": "https://github.com/zainalsaputra/reportin-app-backend#readme"
+}
