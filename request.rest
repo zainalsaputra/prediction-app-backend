@@ -68,3 +68,10 @@ Content-Type: application/json
     "session" : "342341"
 }
 
+###
+http://localhost:3000/predict
+Content-Type: application/json 
+
+{
+
+}
