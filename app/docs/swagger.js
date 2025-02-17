@@ -1,5 +1,6 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const express = require("express");
 
 const swaggerOptions = {
     definition: {
@@ -11,17 +12,21 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: process.env.BASE_URL || "https://prediction-app-backend-steel.vercel.app", 
+                url: process.env.BASE_URL || "https://prediction-app-backend.vercel.app",
             },
         ],
     },
-    apis: [__dirname + "/../routes/*.js"],
+    apis: [__dirname + "/../routes/*.js"], 
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+    const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
+    app.use("/docs", express.static(swaggerDistPath));
+
     console.log("Swagger docs available at /docs");
 };
 
