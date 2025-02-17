@@ -1,5 +1,5 @@
-const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 
 const swaggerOptions = {
     definition: {
@@ -11,11 +11,11 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: process.env.BASE_URL || "https://sec-prediction-app-backend.vercel.app",
+                url: "https://sec-prediction-app-backend.vercel.app",
             },
         ],
     },
-    apis: ["../routes/*.js"], // Pastikan path ini sesuai dengan struktur project-mu
+    apis: [__dirname + "/../routes/*.js"]
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -25,11 +25,9 @@ const setupSwagger = (app) => {
         "/docs",
         swaggerUi.serve,
         swaggerUi.setup(swaggerDocs, {
-            customCssUrl:
-                "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
+            customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
         })
     );
-    console.log("Swagger UI tersedia di /docs");
 };
 
 module.exports = setupSwagger;
