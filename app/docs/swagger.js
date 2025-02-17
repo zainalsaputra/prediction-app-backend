@@ -16,24 +16,19 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [__dirname + "/../routes/*.js"],
+    apis: ["./routes/*.js"], // Perbaiki path
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
+// 🔥 Gunakan CDN Swagger UI untuk menghindari masalah file statis
 const setupSwagger = (app) => {
-    // 1️⃣ **Tentukan path file statis Swagger UI**
-    const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
-    
-    // 2️⃣ **Pastikan file statis dapat diakses**
-    app.use("/swagger-ui", express.static(swaggerDistPath));
-
-    // 3️⃣ **Gunakan Swagger UI dengan file statis yang benar**
     app.use(
         "/docs",
         swaggerUi.serve,
-        swaggerUi.setup(swaggerDocs, { customCssUrl: "/swagger-ui/swagger-ui.css" })
+        swaggerUi.setup(swaggerDocs, {
+            customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
+        })
     );
 
     console.log("Swagger docs available at /docs");
