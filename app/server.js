@@ -10,6 +10,9 @@ app.use(express.json());
 const routes = require('./routes/index');
 app.use(routes);
 
+const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
+app.use("/docs", express.static(swaggerDistPath));
+
 setupSwagger(app);
 
 // const PORT = process.env.PORT || 3000;
