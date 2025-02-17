@@ -21,12 +21,21 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-const setupSwagger = (app) => {
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-    // 🚀 Sajikan file statis Swagger agar CSS dan JS dapat dimuat dengan benar
+const setupSwagger = (app) => {
+    // 🟢 Sajikan file statis Swagger UI
     const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
     app.use("/docs", express.static(swaggerDistPath));
+
+    // 🟢 Sajikan Swagger UI dengan path yang benar
+    app.use(
+        "/docs",
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerDocs, {
+            customCssUrl:
+                "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
+        })
+    );
 
     console.log("Swagger docs available at /docs");
 };
