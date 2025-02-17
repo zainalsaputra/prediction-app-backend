@@ -20,16 +20,13 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-// 🔥 Gunakan CDN Swagger UI untuk menghindari masalah file statis
 const setupSwagger = (app) => {
     app.use(
         "/docs",
         swaggerUi.serve,
-        swaggerUi.setup(swaggerDocs, {
-            customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
-        })
+        swaggerUi.setup(swaggerDocs, { customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css" })
     );
-
+    
     console.log("Swagger docs available at /docs");
 };
 
