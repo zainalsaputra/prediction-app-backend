@@ -1,5 +1,7 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const path = require("path");
+const express = require("express");
 
 const swaggerOptions = {
     definition: {
@@ -15,16 +17,17 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [__dirname + "/../routes/*.js"],
+    apis: [path.join(__dirname, "../routes/*.js")],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-// 🔹 Gunakan CSS dari CDN agar Swagger UI tampil dengan benar
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-
 const setupSwagger = (app) => {
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: CSS_URL }));
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+    // 🚀 Sajikan file statis Swagger agar CSS dan JS dapat dimuat dengan benar
+    const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
+    app.use("/docs", express.static(swaggerDistPath));
+
     console.log("Swagger docs available at /docs");
 };
 
