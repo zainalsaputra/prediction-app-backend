@@ -8,6 +8,12 @@ const swaggerOptions = {
             title: "Predict API",
             version: "1.0.0",
             description: "API untuk mengunggah file gambar dan mendapatkan prediksi dari model AI",
+            termsOfService: "http://example.com/terms/",
+            contact: {
+                name: "API Support",
+                url: "http://www.exmaple.com/support",
+                email: "support@example.com",
+            },
         },
         servers: [
             {
@@ -15,7 +21,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [__dirname + "/../routes/*.js"],
+    apis: ["src/**/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -26,7 +32,7 @@ const setupSwagger = (app) => {
         swaggerUi.serve,
         swaggerUi.setup(swaggerDocs, { customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css" })
     );
-    
+
     console.log("Swagger docs available at /docs");
 };
 
