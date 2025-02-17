@@ -1,5 +1,6 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const express = require("express");
 
 const swaggerOptions = {
     definition: {
@@ -8,12 +9,6 @@ const swaggerOptions = {
             title: "Predict API",
             version: "1.0.0",
             description: "API untuk mengunggah file gambar dan mendapatkan prediksi dari model AI",
-            termsOfService: "http://example.com/terms/",
-            contact: {
-                name: "API Support",
-                url: "http://www.exmaple.com/support",
-                email: "support@example.com",
-            },
         },
         servers: [
             {
@@ -21,7 +16,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ["src/**/*.js"],
+    apis: ["src/**/*.js"], 
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
