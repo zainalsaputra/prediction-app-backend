@@ -1,6 +1,7 @@
 const axios = require("axios");
 const FormData = require("form-data");
 const fs = require("fs");
+require('dotenv').config(); 
 
 class PredictControllers {
 
@@ -25,13 +26,25 @@ class PredictControllers {
             const formData = new FormData();
             formData.append("file", fs.createReadStream(req.file.path));
 
-            const response = await axios.post("http://localhost:5000/predict", formData, {
+            const ai_link = process.env.AI_LINK;
+            if (!ai_link) {
+                return res.status(500).json({ error: "AI_LINK is not defined in environment variables" });
+            }
+
+            const endpoint = 'predict';
+            const response = await axios.post(`${ai_link}/${endpoint}`, formData, {
                 headers: {
                     ...formData.getHeaders(),
                 },
             });
 
-            res.json(response.data);
+            res.json({
+                status: true,
+                prediction : response.data.prediction,
+                message : "Prediksi berhasil!",
+                image_path : response.data.image_path
+            }).status(200);
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal server error" });
