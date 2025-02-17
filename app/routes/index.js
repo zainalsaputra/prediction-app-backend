@@ -3,7 +3,7 @@ const express = require('express');
 
 const app = express();
 
-// const courses = require('./courses');
+const predictRoutes = require('./predictRoutes');
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ app.use(router);
 //   });
 // });
 
-// router.use('/courses', courses);
+router.use('/predict', predictRoutes);
 
 // router.use(viewEngines);
 
