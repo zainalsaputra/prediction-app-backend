@@ -16,13 +16,14 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [__dirname + "/../routes/*.js"], 
+    apis: [__dirname + "/../routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 const setupSwagger = (app) => {
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: CSS_URL }));
 
     const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
     app.use("/docs", express.static(swaggerDistPath));
