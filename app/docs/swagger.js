@@ -1,7 +1,5 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const path = require("path");
-const express = require("express");
 
 const swaggerOptions = {
     definition: {
@@ -17,17 +15,12 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [path.join(__dirname, "../routes/*.js")],
+    apis: ["../routes/*.js"], // Pastikan path ini sesuai dengan struktur project-mu
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
-    // 🟢 Sajikan file statis Swagger UI
-    const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
-    app.use("/docs", express.static(swaggerDistPath));
-
-    // 🟢 Sajikan Swagger UI dengan path yang benar
     app.use(
         "/docs",
         swaggerUi.serve,
@@ -36,8 +29,7 @@ const setupSwagger = (app) => {
                 "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
         })
     );
-
-    console.log("Swagger docs available at /docs");
+    console.log("Swagger UI tersedia di /docs");
 };
 
 module.exports = setupSwagger;
