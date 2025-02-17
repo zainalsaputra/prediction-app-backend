@@ -11,9 +11,11 @@
 + esLint
 + nodemon
 + dotEnv
++ AWS
++ Swagger
 
 # Update
-+ Initializing project
++ Installing auth to prediction API and docs API
 
 # RDMS EXTENSION
 + uuid-ossp
