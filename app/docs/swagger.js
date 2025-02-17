@@ -23,10 +23,18 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 const setupSwagger = (app) => {
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: CSS_URL }));
-
+    // 1️⃣ **Tentukan path file statis Swagger UI**
     const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
-    app.use("/docs", express.static(swaggerDistPath));
+    
+    // 2️⃣ **Pastikan file statis dapat diakses**
+    app.use("/swagger-ui", express.static(swaggerDistPath));
+
+    // 3️⃣ **Gunakan Swagger UI dengan file statis yang benar**
+    app.use(
+        "/docs",
+        swaggerUi.serve,
+        swaggerUi.setup(swaggerDocs, { customCssUrl: "/swagger-ui/swagger-ui.css" })
+    );
 
     console.log("Swagger docs available at /docs");
 };
