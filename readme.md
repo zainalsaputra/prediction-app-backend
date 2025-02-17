@@ -15,7 +15,7 @@
 + Swagger
 
 # Update
-+ Installing auth to prediction API and docs API
++ Installing auth to prediction API and documentations API
 
 # RDMS EXTENSION
 + uuid-ossp
