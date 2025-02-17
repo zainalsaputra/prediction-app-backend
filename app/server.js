@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require('express');
 const setupSwagger = require('./docs/swagger');
 
@@ -5,12 +6,19 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+setupSwagger(app);
 
 const routes = require('./routes/index');
 app.use(routes);
-
-setupSwagger(app);
 
 // const PORT = process.env.PORT || 3000;
 
