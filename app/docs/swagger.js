@@ -11,7 +11,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000", 
+                url: process.env.BASE_URL || "https://prediction-app-backend-steel.vercel.app", 
             },
         ],
     },
@@ -22,7 +22,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-    console.log("Swagger docs available at http://localhost:3000/docs");
+    console.log("Swagger docs available at /docs");
 };
 
 module.exports = setupSwagger;
