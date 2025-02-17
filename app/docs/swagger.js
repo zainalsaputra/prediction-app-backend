@@ -1,6 +1,5 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-const express = require("express");
 
 const swaggerOptions = {
     definition: {
@@ -16,7 +15,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ["./routes/*.js"], // Perbaiki path
+    apis: [__dirname + "/../routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
