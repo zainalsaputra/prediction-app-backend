@@ -92,6 +92,16 @@ class UsersServices {
       throw new Error('Failed to delete user');
     }
   }
+
+  static async checkUserExists(user_id) {
+    try {
+        const user = await Users.findOne({ where: { id: user_id } });
+        return user !== null;
+    } catch (error) {
+        console.error('Error checking user existence:', error);
+        throw new Error('Failed to check user existence');
+    }
+  }
 }
 
 module.exports = UsersServices;
