@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { createReportSchema} = require('../validations/reportValidations');
+const createReportSchema = require('../validations/reportValidations');
 const ReportService = require('../services/reportServices');
 const UsersServices = require('../services/usersServices');
 
@@ -16,11 +16,11 @@ class ReportsController {
                 return next(createError(404, 'User not found!'));
             }
 
-            // laporan tidak valid
-            // const allowedTypes = ['Accident', 'Fire', 'Crime']; // Contoh tipe yang diperbolehkan
-            // if (!allowedTypes.includes(req.body.type_report)) {
-            //     return next(createError(422, `Invalid type_report. Allowed values: ${allowedTypes.join(', ')}`));
-            // }
+            // laporan valid
+            const allowedTypes = ['Jalan Rusak', 'Bencana', 'Rumah Retak']; 
+            if (!allowedTypes.includes(req.body.type_report)) {
+                return next(createError(422, `Invalid Type Report, Allowed values: ${allowedTypes.join(', ')}`));
+            }
 
             const response = await ReportService.createReport(req.body);
 

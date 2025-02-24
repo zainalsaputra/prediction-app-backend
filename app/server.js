@@ -9,7 +9,11 @@ app.use(express.json());
 
 const routes = require('./routes/index');
 
+const errorHandler = require('./middleware/errorHandler');
+
 app.use(routes);
+
+app.use(errorHandler);
 
 setupSwagger(app);
 

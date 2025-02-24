@@ -1,7 +1,13 @@
 const Joi = require('joi');
 
 const createReportSchema = Joi.object({
-    userId: Joi.string().uuid().required().messages({
+    // userId: Joi.string().uuid().required().messages({
+    //     'string.base': 'User ID must be a string',
+    //     'string.empty': 'User ID cannot be empty',
+    //     'string.guid': 'User ID must be a valid UUID',
+    //     'any.required': 'User ID is required',
+    // }),
+    userId: Joi.number().required().messages({
         'string.base': 'User ID must be a string',
         'string.empty': 'User ID cannot be empty',
         'string.guid': 'User ID must be a valid UUID',
