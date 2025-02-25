@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const predictRoutes = require('./predictRoutes');
+const reportRoutes = require('./reportRoutes');
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ app.use(router);
 // });
 
 router.use('/predict', predictRoutes);
+router.use('/report', reportRoutes);
 
 // router.use(viewEngines);
 

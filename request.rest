@@ -5,14 +5,15 @@ GET http://localhost:3000/courses
 
 
 ###
-POST http://localhost:3000/courses
+POST http://localhost:3000/report
 Content-Type: application/json
 
 {
-    "name" : "Informatika 2023",
-    "beforeTime" : "210703",
-    "afterTime" : "68290298",
-    "session" : "62812"
+    "image" : "https://aws.storage-s3.com/21d8h92yy1232",
+    "type_report" : "Rumah Retak",
+    "description" : "62812",
+    "location" : "jcodhwsdv",
+    "userId" : "b077733d-e727-4cd5-8a6c-88f98f59d7b1"
 }
 
 ###

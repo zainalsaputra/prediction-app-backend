@@ -1,48 +1,44 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-class Users extends Model {
+class Reports extends Model {
   static associate(models) {
-    this.belongsTo(models.Roles, { foreignKey: 'roleId', as: 'role' });
-    this.hasMany(models.Reports, { foreignKey: 'userId', as: 'reports' });
+    this.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
   }
 
   static initModel(sequelize) {
-    Users.init(
+    Reports.init(
       {
         id: {
+          allowNull: false,
           primaryKey: true,
           type: DataTypes.UUID,
           defaultValue: Sequelize.literal('uuid_generate_v4()'),
         },
-        name: {
+        userId: {
           allowNull: false,
-          type: DataTypes.STRING,
-        },
-        email: {
-          allowNull: false,
-          type: DataTypes.STRING,
-          unique: true,
-          validate: {
-            isEmail: true,
-          },
-        },
-        password: {
-          allowNull: false,
-          type: DataTypes.TEXT,
-        },
-        refreshToken: {
-          allowNull: true,
-          type: DataTypes.TEXT,
-        },
-        roleId: {
-          allowNull: false,
-          type: DataTypes.INTEGER,
+          type: DataTypes.UUID,
           references: {
-            model: 'roles',
+            model: 'users',
             key: 'id',
           },
           onUpdate: 'CASCADE',
-          onDelete: 'RESTRICT',
+          onDelete: 'CASCADE',
+        },
+        image: {
+          allowNull: false,
+          type: DataTypes.STRING,
+        },
+        type_report: {
+          allowNull: false,
+          type: DataTypes.STRING,
+        },
+        description: {
+          allowNull: false,
+          type: DataTypes.STRING,
+        },
+        location: {
+          allowNull: false,
+          type: DataTypes.STRING,
         },
         createdAt: {
           allowNull: false,
@@ -57,12 +53,12 @@ class Users extends Model {
       },
       {
         sequelize,
-        modelName: 'Users',
-        tableName: 'users',
+        modelName: 'Reports',
+        tableName: 'reports',
         timestamps: true,
       }
     );
   }
 }
 
-module.exports = Users;
+module.exports = Reports;

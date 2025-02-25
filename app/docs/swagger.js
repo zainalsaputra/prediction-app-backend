@@ -11,8 +11,13 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000", 
+                url: "http://localhost:3000",
+                description: "Local server",
             },
+            // {
+            //     url: "http://0.0.0.0:0000",
+            //     description: "Production server",
+            // },
         ],
     },
     apis: [__dirname + "/../routes/*.js"],
@@ -22,7 +27,9 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-    console.log("Swagger docs available at http://localhost:3000/docs");
+
+    const serverUrls = swaggerOptions.definition.servers.map(server => server.url);
+    serverUrls.forEach(url => console.log(`Swagger docs available at : ${url}/docs`));
 };
 
 module.exports = setupSwagger;
