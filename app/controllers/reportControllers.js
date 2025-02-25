@@ -1,5 +1,14 @@
+const fs = require('fs');
 const createError = require('http-errors');
-const { createReportSchema, getReportByIdSchema } = require('../validations/reportValidations');
+
+const {
+    createReportSchema,
+    getReportByIdSchema,
+    updateReportSchema,
+    updateTypeReportSchema,
+    deleteReportSchema
+} = require('../validations/reportValidations');
+
 const ReportService = require('../services/reportServices');
 const UsersServices = require('../services/usersServices');
 
@@ -38,7 +47,7 @@ class ReportsController {
             });
 
         } catch (error) {
-            next(error); // next untuk meneruskan error ke middleware errorHandler
+            next(error); // next to errorHandler
         }
     }
 
@@ -77,9 +86,6 @@ class ReportsController {
         }
     }
 
-    /**
-     * Mendapatkan laporan berdasarkan ID
-     */
     static async getReportById(req, res, next) {
         try {
             const params = req.params.id;
@@ -130,7 +136,7 @@ class ReportsController {
 
             const response = await ReportService.getReportsByUserId(params);
             if (!response || response.length === 0) {
-                return next(createError(404, `No reports found for this user with id  = ${{ params }}`));
+                return next(createError(404,'`No reports found for this user'));
             }
 
             const baseUrl = `${req.protocol}://${req.get('host')}/`;
@@ -158,7 +164,7 @@ class ReportsController {
                 "roleId": response.roleId,
                 "createdAt": response.createdAt,
                 "updatedAt": response.updatedAt,
-                "reports" : reportsWithImageUrls
+                "reports": reportsWithImageUrls
             }
 
             return res.status(200).json({
@@ -171,32 +177,100 @@ class ReportsController {
         }
     }
 
-    /**
-     * Memperbarui laporan
-     */
     static async updateReport(req, res, next) {
         try {
-            const { error } = reportSchema.validate(req.body, { allowUnknown: true });
-            if (error) throw createError(400, error.details[0].message);
+            const reportId = req.params.id;
 
-            const updated = await ReportService.updateReport(req.params.id, req.body);
-            if (!updated) throw createError(404, 'Report not found or no changes made');
+            const { error } = updateReportSchema.validate({ ...req.body, id: reportId });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
 
-            res.json({ message: 'Report successfully updated' });
+            const existingReport = await ReportService.getReportById(reportId);
+            if (!existingReport) {
+                return next(createError(404, 'Report not found!'));
+            }
+
+            const imagePath = req.file ? req.file.path : existingReport.image;
+
+            const updatedData = {
+                ...req.body,
+                image: imagePath,
+                updatedAt: new Date(),
+            };
+
+            const updatedReport = await ReportService.updateReport(reportId, updatedData);
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Report updated successfully!',
+                data: updatedReport,
+            });
+
         } catch (error) {
             next(error);
         }
     }
 
-    /**
-     * Menghapus laporan
-     */
+    static async updateTypeReport(req, res, next) {
+        try {
+            const reportId = req.params.id;
+
+            const { error } = updateTypeReportSchema.validate({ id: reportId, ...req.body });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const existingReport = await ReportService.getReportById(reportId);
+            if (!existingReport) {
+                return next(createError(404, 'Report not found!'));
+            }
+
+            const updatedData = {
+                type_report: req.body.type_report,
+                updatedAt: new Date(),
+            };
+
+            const updatedReport = await ReportService.updateReport(reportId, updatedData);
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Report type updated successfully!',
+                data: updatedReport,
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async deleteReport(req, res, next) {
         try {
-            const deleted = await ReportService.deleteReport(req.params.id);
-            if (!deleted) throw createError(404, 'Report not found or already deleted');
+            const reportId = req.params.id;
 
-            res.json({ message: 'Report successfully deleted' });
+            const { error } = deleteReportSchema.validate({ id: reportId });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const existingReport = await ReportService.getReportById(reportId);
+            if (!existingReport) {
+                return next(createError(404, 'Report not found!'));
+            }
+
+            if (existingReport.image) {
+                fs.unlink(existingReport.image, (err) => {
+                    if (err) console.error('Error deleting image:', err);
+                });
+            }
+
+            await ReportService.deleteReport(reportId);
+
+            return res.status(200).json({
+                status: 'success',
+                message: `Report deleted successfully!`,
+            });
+
         } catch (error) {
             next(error);
         }

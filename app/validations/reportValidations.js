@@ -7,12 +7,6 @@ const createReportSchema = Joi.object({
         'string.guid': 'User ID must be a valid UUID',
         'any.required': 'User ID is required',
     }),
-    // image: Joi.string().uri().required().messages({
-    //     'string.base': 'Image must be a string',
-    //     'string.empty': 'Image cannot be empty',
-    //     'string.uri': 'Image must be a valid URL',
-    //     'any.required': 'Image is required',
-    // }),
     type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').required().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
@@ -40,6 +34,52 @@ const getReportByIdSchema = Joi.object({
     })
 });
 
+const updateReportSchema = Joi.object({
+    id: Joi.string().uuid().required().messages({
+        'string.base': 'ID must be a string',
+        'string.empty': 'ID cannot be empty',
+        'string.guid': 'ID must be a valid UUID',
+        'any.required': 'ID is required',
+    }),
+    type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').required().messages({
+        'string.base': 'Type report must be a string',
+        'string.empty': 'Type report cannot be empty',
+        'any.only': 'Invalid report type',
+        'any.required': 'Type report is required',
+    }),
+    description: Joi.string().required(),
+    location: Joi.string().required(),
+    image: Joi.any().optional(),
+});
+
+const updateTypeReportSchema = Joi.object({
+    id: Joi.string().uuid().required().messages({
+        'string.base': 'ID must be a string',
+        'string.empty': 'ID cannot be empty',
+        'string.guid': 'ID must be a valid UUID',
+        'any.required': 'ID is required',
+    }),
+    type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').required().messages({
+        'string.base': 'Type report must be a string',
+        'string.empty': 'Type report cannot be empty',
+        'any.only': 'Invalid report type',
+        'any.required': 'Type report is required',
+    }),
+});
+
+const deleteReportSchema = Joi.object({
+    id: Joi.string().uuid().required().messages({
+        'string.base': 'ID must be a string',
+        'string.empty': 'ID cannot be empty',
+        'string.guid': 'ID must be a valid UUID',
+        'any.required': 'ID is required',
+    }),
+})
+
 module.exports = {
-    createReportSchema, getReportByIdSchema
+    createReportSchema, 
+    getReportByIdSchema, 
+    updateReportSchema,
+    updateTypeReportSchema,
+    deleteReportSchema
 };

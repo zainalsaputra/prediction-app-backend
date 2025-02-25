@@ -1,6 +1,7 @@
 const express = require('express');
 const reportControllers = require('../controllers/reportControllers');
 const imageUploader = require('../middleware/imageUploader');
+const ReportsController = require('../controllers/reportControllers');
 
 const router = express.Router();
 
@@ -163,5 +164,193 @@ router.get('/:id', reportControllers.getReportById);
  *         description: Internal server error
  */
 router.get('/user/:userId', reportControllers.getReportsByUserId);
+
+/**
+ * @swagger
+ * /report/{id}:
+ *   put:
+ *     summary: Update an existing report (including image)
+ *     description: Update a report's details including type, description, location, and optional image upload.
+ *     tags:
+ *       - Reports
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the report to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type_report:
+ *                 type: string
+ *                 example: "Jalan Rusak"
+ *               description:
+ *                 type: string
+ *                 example: "Jalan utama mengalami kerusakan parah akibat hujan deras."
+ *               location:
+ *                 type: string
+ *                 example: "Jl. Merdeka No. 123, Jakarta"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Optional image file to update the report
+ *     responses:
+ *       200:
+ *         description: Report updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Report updated successfully!"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "3339b4b2-26ea-4039-bcd5-9f8b170ed6c8"
+ *                     type_report:
+ *                       type: string
+ *                       example: "Jalan Rusak"
+ *                     description:
+ *                       type: string
+ *                       example: "Jalan utama mengalami kerusakan parah akibat hujan deras."
+ *                     location:
+ *                       type: string
+ *                       example: "Jl. Merdeka No. 123, Jakarta"
+ *                     image:
+ *                       type: string
+ *                       example: "uploads/report-image-12345.jpg"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid request payload
+ *       404:
+ *         description: Report not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.put('/:id', (req, res, next) => {
+    imageUploader.single("image")(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        next();
+    });
+}, ReportsController.updateReport);
+
+/**
+ * @swagger
+ * /report/{id}/type-report:
+ *   patch:
+ *     summary: Update the type of a report
+ *     description: Update only the `type_report` field of an existing report.
+ *     tags:
+ *       - Reports
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the report to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type_report:
+ *                 type: string
+ *                 example: "Bencana"
+ *                 description: New type of the report
+ *     responses:
+ *       200:
+ *         description: Report type updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Report type updated successfully!"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "3339b4b2-26ea-4039-bcd5-9f8b170ed6c8"
+ *                     type_report:
+ *                       type: string
+ *                       example: "Bencana"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid request payload
+ *       404:
+ *         description: Report not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.patch('/:id/type-report', ReportsController.updateTypeReport);
+
+/**
+ * @swagger
+ * /report/{id}:
+ *   delete:
+ *     summary: Delete a report
+ *     description: Remove an existing report by ID.
+ *     tags:
+ *       - Reports
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the report to delete
+ *     responses:
+ *       200:
+ *         description: Report deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Report deleted successfully!"
+ *       400:
+ *         description: Invalid request payload
+ *       404:
+ *         description: Report not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.delete('/:id', ReportsController.deleteReport);
 
 module.exports = router;

@@ -55,7 +55,7 @@ class ReportsService {
   static async updateReport(id, body) {
     const [updated] = await Reports.update(body, { where: { id } });
 
-    return updated; // return jumlah baris yang diperbarui
+    return updated;
   }
 
   /**
