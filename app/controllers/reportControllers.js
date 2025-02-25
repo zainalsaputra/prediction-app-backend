@@ -17,6 +17,11 @@ class ReportsController {
         try {
             const { error } = createReportSchema.validate(req.body);
             if (error) {
+                if (req.file) {
+                    fs.unlink(req.file.path, (err) => {
+                        if (err) console.error('Error deleting file:', err);
+                    });
+                }
                 return next(createError(400, error.details[0].message));
             }
 
@@ -47,6 +52,11 @@ class ReportsController {
             });
 
         } catch (error) {
+            if (req.file) {
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error('Error deleting file:', err);
+                });
+            }
             next(error); // next to errorHandler
         }
     }
@@ -183,6 +193,11 @@ class ReportsController {
 
             const { error } = updateReportSchema.validate({ ...req.body, id: reportId });
             if (error) {
+                if (req.file) {
+                    fs.unlink(req.file.path, (err) => {
+                        if (err) console.error('Error deleting file:', err);
+                    });
+                }
                 return next(createError(400, error.details[0].message));
             }
 
@@ -191,7 +206,16 @@ class ReportsController {
                 return next(createError(404, 'Report not found!'));
             }
 
-            const imagePath = req.file ? req.file.path : existingReport.image;
+            let imagePath = existingReport.image; 
+
+            if (req.file) {
+                if (existingReport.image) {
+                    fs.unlink(existingReport.image, (err) => {
+                        if (err) console.error('Error deleting old image:', err);
+                    });
+                }
+                imagePath = req.file.path;
+            }
 
             const updatedData = {
                 ...req.body,
@@ -208,6 +232,11 @@ class ReportsController {
             });
 
         } catch (error) {
+            if (req.file) {
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error('Error deleting file:', err);
+                });
+            }
             next(error);
         }
     }
