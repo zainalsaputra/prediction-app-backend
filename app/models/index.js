@@ -11,16 +11,14 @@ const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-// Load semua model
 fs.readdirSync(__dirname)
   .filter(file => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js' && file.indexOf('.test.js') === -1)
   .forEach(file => {
     const model = require(path.join(__dirname, file));
-    model.initModel(sequelize); // Panggil method initModel() pada setiap model
+    model.initModel(sequelize);
     db[model.name] = model;
   });
 
-// Panggil metode associate jika ada
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

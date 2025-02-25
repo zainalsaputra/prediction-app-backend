@@ -30,12 +30,6 @@ class ReportsController {
                 return next(createError(404, 'User is not registered in our database!'));
             }
 
-            // laporan valid
-            // const allowedTypes = ['Jalan Rusak', 'Bencana', 'Rumah Retak']; 
-            // if (!allowedTypes.includes(req.body.type_report)) {
-            //     return next(createError(422, `Invalid Type Report, Allowed values: ${allowedTypes.join(', ')}`));
-            // }
-
             const imagePath = req.file ? req.file.path : null;
 
             const reportData = {
@@ -57,20 +51,14 @@ class ReportsController {
                     if (err) console.error('Error deleting file:', err);
                 });
             }
-            next(error); // next to errorHandler
+            next(error);
         }
     }
 
     static async getAllReports(req, res, next) {
         try {
             const reports = await ReportService.getAllReports();
-
             const baseUrl = `${req.protocol}://${req.get('host')}/`;
-
-            // const reportsWithImageUrls = reports.map(report => ({
-            //     ...report,
-            //     image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null
-            // }));
 
             const reportsWithImageUrls = reports.map(report => {
                 const reportData = report.toJSON();
@@ -80,7 +68,9 @@ class ReportsController {
                     image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    location: reportData.location,
+                    region: reportData.region,
+                    longitude: reportData.longitude,
+                    latitude: reportData.latitude,
                     createdAt: reportData.createdAt,
                     updatedAt: reportData.updatedAt,
                 };
@@ -98,14 +88,14 @@ class ReportsController {
 
     static async getReportById(req, res, next) {
         try {
-            const params = req.params.id;
+            const reportId = req.params.id;
+            const { error } = getReportByIdSchema.validate({ id: reportId });
 
-            const { error } = getReportByIdSchema.validate({ id: params });
             if (error) {
                 return next(createError(400, error.details[0].message));
             }
 
-            const report = await ReportService.getReportById(params);
+            const report = await ReportService.getReportById(reportId);
             if (!report) {
                 return next(createError(404, 'Report not found!'));
             }
@@ -119,7 +109,9 @@ class ReportsController {
                 image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                 type_report: reportData.type_report,
                 description: reportData.description,
-                location: reportData.location,
+                region: reportData.region,
+                longitude: reportData.longitude,
+                latitude: reportData.latitude,
                 createdAt: reportData.createdAt,
                 updatedAt: reportData.updatedAt,
             };
@@ -136,17 +128,16 @@ class ReportsController {
 
     static async getReportsByUserId(req, res, next) {
         try {
+            const userId = req.params.userId;
+            const { error } = getReportByIdSchema.validate({ id: userId });
 
-            const params = req.params.userId;
-
-            const { error } = getReportByIdSchema.validate({ id: params });
             if (error) {
                 return next(createError(400, error.details[0].message));
             }
 
-            const response = await ReportService.getReportsByUserId(params);
+            const response = await ReportService.getReportsByUserId(userId);
             if (!response || response.length === 0) {
-                return next(createError(404,'`No reports found for this user'));
+                return next(createError(404, 'No reports found for this user'));
             }
 
             const baseUrl = `${req.protocol}://${req.get('host')}/`;
@@ -159,27 +150,26 @@ class ReportsController {
                     image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    location: reportData.location,
+                    region: reportData.region,
+                    longitude: reportData.longitude,
+                    latitude: reportData.latitude,
                     createdAt: reportData.createdAt,
                     updatedAt: reportData.updatedAt,
                 };
             });
 
-            const responseData = {
-                "id": response.id,
-                "name": response.name,
-                "email": response.email,
-                "password": response.password,
-                "refreshToken": response.refreshToken,
-                "roleId": response.roleId,
-                "createdAt": response.createdAt,
-                "updatedAt": response.updatedAt,
-                "reports": reportsWithImageUrls
-            }
-
             return res.status(200).json({
                 status: 'success',
-                data: responseData
+                data: {
+                    user: {
+                        id: response.id,
+                        name: response.name,
+                        email: response.email,
+                        createdAt: response.createdAt,
+                        updatedAt: response.updatedAt
+                    },
+                    reports: reportsWithImageUrls
+                }
             });
 
         } catch (error) {
@@ -206,8 +196,7 @@ class ReportsController {
                 return next(createError(404, 'Report not found!'));
             }
 
-            let imagePath = existingReport.image; 
-
+            let imagePath = existingReport.image;
             if (req.file) {
                 if (existingReport.image) {
                     fs.unlink(existingReport.image, (err) => {
