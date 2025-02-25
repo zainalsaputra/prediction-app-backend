@@ -1,5 +1,6 @@
-const Reports = require('../models/reports');
 const { sequelize } = require('../models');
+const Reports = require('../models/reports');
+const Users = require('../models/users');
 
 class ReportsService {
   /**
@@ -28,6 +29,24 @@ class ReportsService {
    */
   static async getReportById(id) {
     return await Reports.findOne({ where: { id } });
+  }
+
+  /**
+     * Mendapatkan laporan berdasarkan UserID
+     */
+  static async getReportsByUserId(userId) {
+    return await Users.findOne({
+      where: {
+        id: userId
+      },
+      include: [
+        {
+          model: Reports,
+          as: 'reports', 
+          attributes: ['id', 'type_report', 'description', 'location', 'image', 'createdAt', 'updatedAt'],
+        },
+      ],
+    });
   }
 
   /**

@@ -1,11 +1,14 @@
 const express = require('express');
 const setupSwagger = require('./docs/swagger');
+const path = require('path');
 
 require('dotenv').config();
 
 const app = express();
 
 app.use(express.json());
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const routes = require('./routes/index');
 

@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const createReportSchema = require('../validations/reportValidations');
+const { createReportSchema, getReportByIdSchema } = require('../validations/reportValidations');
 const ReportService = require('../services/reportServices');
 const UsersServices = require('../services/usersServices');
 
@@ -13,16 +13,23 @@ class ReportsController {
 
             const userExists = await UsersServices.checkUserExists(req.body.userId);
             if (!userExists) {
-                return next(createError(404, 'User not found!'));
+                return next(createError(404, 'User is not registered in our database!'));
             }
 
             // laporan valid
-            const allowedTypes = ['Jalan Rusak', 'Bencana', 'Rumah Retak']; 
-            if (!allowedTypes.includes(req.body.type_report)) {
-                return next(createError(422, `Invalid Type Report, Allowed values: ${allowedTypes.join(', ')}`));
-            }
+            // const allowedTypes = ['Jalan Rusak', 'Bencana', 'Rumah Retak']; 
+            // if (!allowedTypes.includes(req.body.type_report)) {
+            //     return next(createError(422, `Invalid Type Report, Allowed values: ${allowedTypes.join(', ')}`));
+            // }
 
-            const response = await ReportService.createReport(req.body);
+            const imagePath = req.file ? req.file.path : null;
+
+            const reportData = {
+                ...req.body,
+                image: imagePath
+            };
+
+            const response = await ReportService.createReport(reportData);
 
             return res.status(201).json({
                 status: 'success',
@@ -31,17 +38,40 @@ class ReportsController {
             });
 
         } catch (error) {
-            next(error); // Gunakan next untuk meneruskan error ke middleware errorHandler
+            next(error); // next untuk meneruskan error ke middleware errorHandler
         }
     }
 
-    /**
-     * Mendapatkan semua laporan
-     */
     static async getAllReports(req, res, next) {
         try {
-            const reports = await ReportService.getAllReports(req.query);
-            res.json(reports);
+            const reports = await ReportService.getAllReports();
+
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+
+            // const reportsWithImageUrls = reports.map(report => ({
+            //     ...report,
+            //     image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null
+            // }));
+
+            const reportsWithImageUrls = reports.map(report => {
+                const reportData = report.toJSON();
+                return {
+                    id: reportData.id,
+                    userId: reportData.userId,
+                    image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                    type_report: reportData.type_report,
+                    description: reportData.description,
+                    location: reportData.location,
+                    createdAt: reportData.createdAt,
+                    updatedAt: reportData.updatedAt,
+                };
+            });
+
+            return res.status(200).json({
+                status: 'success',
+                data: reportsWithImageUrls
+            });
+
         } catch (error) {
             next(error);
         }
@@ -52,10 +82,90 @@ class ReportsController {
      */
     static async getReportById(req, res, next) {
         try {
-            const report = await ReportService.getReportById(req.params.id);
-            if (!report) throw createError(404, 'Report not found');
+            const params = req.params.id;
 
-            res.json(report);
+            const { error } = getReportByIdSchema.validate({ id: params });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const report = await ReportService.getReportById(params);
+            if (!report) {
+                return next(createError(404, 'Report not found!'));
+            }
+
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+            const reportData = report.toJSON();
+
+            const formattedReport = {
+                id: reportData.id,
+                userId: reportData.userId,
+                image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                type_report: reportData.type_report,
+                description: reportData.description,
+                location: reportData.location,
+                createdAt: reportData.createdAt,
+                updatedAt: reportData.updatedAt,
+            };
+
+            return res.status(200).json({
+                status: 'success',
+                data: formattedReport
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getReportsByUserId(req, res, next) {
+        try {
+
+            const params = req.params.userId;
+
+            const { error } = getReportByIdSchema.validate({ id: params });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const response = await ReportService.getReportsByUserId(params);
+            if (!response || response.length === 0) {
+                return next(createError(404, `No reports found for this user with id  = ${{ params }}`));
+            }
+
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+
+            const reportsWithImageUrls = response.reports.map(report => {
+                const reportData = report.toJSON();
+                return {
+                    id: reportData.id,
+                    userId: reportData.userId,
+                    image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                    type_report: reportData.type_report,
+                    description: reportData.description,
+                    location: reportData.location,
+                    createdAt: reportData.createdAt,
+                    updatedAt: reportData.updatedAt,
+                };
+            });
+
+            const responseData = {
+                "id": response.id,
+                "name": response.name,
+                "email": response.email,
+                "password": response.password,
+                "refreshToken": response.refreshToken,
+                "roleId": response.roleId,
+                "createdAt": response.createdAt,
+                "updatedAt": response.updatedAt,
+                "reports" : reportsWithImageUrls
+            }
+
+            return res.status(200).json({
+                status: 'success',
+                data: responseData
+            });
+
         } catch (error) {
             next(error);
         }

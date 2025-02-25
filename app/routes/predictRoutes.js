@@ -1,5 +1,5 @@
 const express = require('express');
-const predictUploader = require('../middleware/predictUploader');
+const imageUploader = require('../middleware/imageUploader');
 const predictControllers = require('../controllers/predictControllers');
 
 const router = express.Router();
@@ -47,7 +47,7 @@ router.get('/', predictControllers.getResponseAPI);
  *         description: Kesalahan server
  */
 router.post('/', (req, res, next) => {
-    predictUploader.single("image")(req, res, (err) => {
+    imageUploader.single("image")(req, res, (err) => {
         if (err) {
             return res.status(400).json({ error: err.message });
         }
