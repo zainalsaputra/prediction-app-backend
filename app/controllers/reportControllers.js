@@ -6,7 +6,8 @@ const {
     getReportByIdSchema,
     updateReportSchema,
     updateTypeReportSchema,
-    deleteReportSchema
+    deleteReportSchema,
+    searchReportsSchema
 } = require('../validations/reportValidations');
 
 const ReportService = require('../services/reportServices');
@@ -287,6 +288,53 @@ class ReportsController {
             return res.status(200).json({
                 status: 'success',
                 message: `Report deleted successfully!`,
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async searchReports(req, res, next) {
+        try {
+
+            const { error, value } = searchReportsSchema.validate(req.query);
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const { type_report, region, userId, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+
+            const reports = await ReportService.getFilteredReports({
+                type_report,
+                region,
+                userId,
+                startDate,
+                endDate,
+                sortBy,
+                order
+            });
+
+            let filterMessage = [];
+            if (type_report) filterMessage.push(`type '${type_report}'`);
+            if (region) filterMessage.push(`region '${region}'`);
+            if (userId) filterMessage.push(`user ID '${userId}'`);
+            if (startDate) filterMessage.push(`from '${startDate}'`);
+            if (endDate) filterMessage.push(`until '${endDate}'`);
+
+            const searchCriteria = filterMessage.length > 0 ? filterMessage.join(', ') : 'no filters applied';
+
+            if (reports.length === 0) {
+                return res.status(200).json({
+                    status: 'success',
+                    message: `No reports found with ${searchCriteria}.`,
+                    data: [],
+                });
+            }
+
+            return res.status(200).json({
+                status: 'success',
+                data: reports
             });
 
         } catch (error) {
