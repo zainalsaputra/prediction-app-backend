@@ -96,10 +96,40 @@ const deleteReportSchema = Joi.object({
     }),
 });
 
+const searchReportsSchema = Joi.object({
+    type_report: Joi.string().optional().messages({
+        'string.base': 'Type report must be a string',
+        'any.only': 'Invalid report type',
+    }),
+    region: Joi.string().optional().messages({
+        'string.base': 'Region must be a string',
+    }),
+    userId: Joi.string().uuid().optional().messages({
+        'string.base': 'User ID must be a string',
+        'string.guid': 'User ID must be a valid UUID',
+    }),
+    startDate: Joi.date().iso().optional().messages({
+        'date.base': 'Start date must be a valid date in YYYY-MM-DD format',
+    }),
+    endDate: Joi.date().iso().greater(Joi.ref('startDate')).optional().messages({
+        'date.base': 'End date must be a valid date in YYYY-MM-DD format',
+        'date.greater': 'End date must be later than start date',
+    }),
+    sortBy: Joi.string().valid('createdAt', 'updatedAt', 'type_report', 'region').optional().messages({
+        'string.base': 'Sort field must be a string',
+        'any.only': 'Invalid sorting field',
+    }),
+    order: Joi.string().valid('ASC', 'DESC').optional().messages({
+        'string.base': 'Order must be a string',
+        'any.only': 'Order must be "ASC" or "DESC"',
+    }),
+});
+
 module.exports = {
     createReportSchema, 
     getReportByIdSchema, 
     updateReportSchema,
     updateTypeReportSchema,
-    deleteReportSchema
+    deleteReportSchema,
+    searchReportsSchema
 };
