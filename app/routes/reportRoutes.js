@@ -64,15 +64,67 @@ router.post('/', (req, res, next) => {
  * /reports:
  *   get:
  *     summary: Retrieve all reports
+ *     description: Get all reports with optional sorting parameters.
  *     tags:
  *       - Reports
+ *     parameters:
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [createdAt, updatedAt, type_report, region]
+ *           default: createdAt
+ *         description: "Sort results by field (default: 'createdAt')"
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *           default: DESC
+ *         description: "Sort order: ASC for ascending, DESC for descending (default: 'DESC')"
  *     responses:
  *       200:
  *         description: Successfully retrieved reports
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "12345"
+ *                       type_report:
+ *                         type: string
+ *                         example: "Road Damage"
+ *                       description:
+ *                         type: string
+ *                         example: "Severe road damage in downtown."
+ *                       region:
+ *                         type: string
+ *                         example: "Jakarta"
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-01-05T12:00:00.000Z"
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-01-10T14:30:00.000Z"
+ *       400:
+ *         description: Invalid sorting parameters
  *       500:
  *         description: Internal server error
  */
 router.get('/', reportControllers.getAllReports);
+
 
 /**
  * @swagger

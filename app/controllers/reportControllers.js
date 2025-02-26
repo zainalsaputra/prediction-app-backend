@@ -58,7 +58,11 @@ class ReportsController {
 
     static async getAllReports(req, res, next) {
         try {
-            const reports = await ReportService.getAllReports();
+
+            const { sortBy = 'createdAt', order = 'DESC' } = req.query;
+
+            const reports = await ReportService.getAllReports({ sortBy, order });
+
             const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
             const reportsWithImageUrls = reports.map(report => {
@@ -332,9 +336,27 @@ class ReportsController {
                 });
             }
 
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+
+            const reportsWithImageUrls = reports.map(report => {
+                const reportData = report.toJSON();
+                return {
+                    id: reportData.id,
+                    userId: reportData.userId,
+                    image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                    type_report: reportData.type_report,
+                    description: reportData.description,
+                    region: reportData.region,
+                    longitude: reportData.longitude,
+                    latitude: reportData.latitude,
+                    createdAt: reportData.createdAt,
+                    updatedAt: reportData.updatedAt,
+                };
+            });
+
             return res.status(200).json({
                 status: 'success',
-                data: reports
+                data: reportsWithImageUrls
             });
 
         } catch (error) {

@@ -9,10 +9,20 @@ class ReportsService {
     return result;
   }
 
-  static async getAllReports(filters = {}) {
+  static async getAllReports({ sortBy, order }) {
+    
+    const validSortFields = ['createdAt', 'updatedAt', 'type_report', 'region'];
+    if (!validSortFields.includes(sortBy)) {
+      sortBy = 'createdAt';
+    }
+
+    const validOrders = ['ASC', 'DESC'];
+    if (!validOrders.includes(order.toUpperCase())) {
+      order = 'DESC';
+    }
+
     return await Reports.findAll({
-      where: filters,
-      order: [['createdAt', 'DESC']],
+      order: [[sortBy, order.toUpperCase()]],
     });
   }
 
