@@ -18,7 +18,7 @@ app.use(router);
 // });
 
 router.use('/predict', predictRoutes);
-router.use('/report', reportRoutes);
+router.use('/reports', reportRoutes);
 
 // router.use(viewEngines);
 
