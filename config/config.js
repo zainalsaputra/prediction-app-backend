@@ -20,10 +20,10 @@ const config = {
     logging: false,
   },
   production: {
-    username: process.env.POSTGRES_URL_USER,
-    password: process.env.POSTGRES_URL_PASSWORD,
-    database: process.env.POSTGRES_URL_DATABASE,
-    host: process.env.POSTGRES_URL_HOST,
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
+    host: process.env.POSTGRES_HOST,
     dialect: process.env.PROD_DB_DIALECT || 'mysql',
     dialectModule: pg,
     dialectOptions: {
