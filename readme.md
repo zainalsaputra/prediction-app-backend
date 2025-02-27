@@ -19,6 +19,7 @@
 + dotEnv
 + Joi
 + moment
++ Cloudinary
 
 # Tools Py
 + Tensorflow
