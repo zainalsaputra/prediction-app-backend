@@ -1,4 +1,5 @@
 require('dotenv').config();
+const pg = require('pg');
 
 const config = {
   development: {
@@ -7,6 +8,7 @@ const config = {
     database: process.env.DEV_DB_DATABASE,
     host: process.env.DEV_DB_HOST,
     dialect: process.env.DEV_DB_DIALECT || 'mysql',
+    dialectModule: pg,
     logging: process.env.DEV_DB_LOGGING === 'true' ? console.log : false,
   },
   test: {
