@@ -19,8 +19,14 @@ const swaggerOptions = {
         },
         servers: [
             {
+
                 url: process.env.BASE_URL || "https://prediction-app-backend.vercel.app",
+              
             },
+            // {
+            //     url: "http://0.0.0.0:0000",
+            //     description: "Production server",
+            // },
         ],
     },
     apis: [__dirname + "/../routes/*.js"],
@@ -29,6 +35,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
+
     app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css" }));
 
     const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
@@ -38,7 +45,8 @@ const setupSwagger = (app) => {
         customCss:'.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }', customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
     })
 
-    console.log("Swagger docs available at /docs");
+    const serverUrls = swaggerOptions.definition.servers.map(server => server.url);
+    serverUrls.forEach(url => console.log(`Swagger docs available at : ${url}/docs`));
 };
 
 module.exports = setupSwagger;

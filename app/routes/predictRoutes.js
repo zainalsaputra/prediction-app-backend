@@ -4,21 +4,21 @@ const predictControllers = require('../controllers/predictControllers');
 
 const router = express.Router();
 
-/**
- * @swagger
- * /predict:
- *   get:
- *     summary: Cek respons API
- *     description: Mengembalikan respons default dari API.
- *     tags:
- *       - Prediction
- *     responses:
- *       200:
- *         description: API berjalan dengan baik
- *       500:
- *         description: Kesalahan server
- */
-router.get('/', predictControllers.getResponseAPI);
+// /**
+//  * @swagger
+//  * /predict:
+//  *   get:
+//  *     summary: Cek respons API
+//  *     description: Mengembalikan respons default dari API.
+//  *     tags:
+//  *       - Prediction
+//  *     responses:
+//  *       200:
+//  *         description: API berjalan dengan baik
+//  *       500:
+//  *         description: Kesalahan server
+//  */
+// router.get('/', predictControllers.getResponseAPI);
 
 /**
  * @swagger
