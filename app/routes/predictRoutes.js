@@ -1,24 +1,24 @@
 const express = require('express');
-const imageUploader = require('../middleware/imageUploader');
+const predictUploader = require('../middleware/predictUploader');
 const predictControllers = require('../controllers/predictControllers');
 
 const router = express.Router();
 
-/**
- * @swagger
- * /predict:
- *   get:
- *     summary: Cek respons API
- *     description: Mengembalikan respons default dari API.
- *     tags:
- *       - Prediction
- *     responses:
- *       200:
- *         description: API berjalan dengan baik
- *       500:
- *         description: Kesalahan server
- */
-router.get('/', predictControllers.getResponseAPI);
+// /**
+//  * @swagger
+//  * /predict:
+//  *   get:
+//  *     summary: Cek respons API
+//  *     description: Mengembalikan respons default dari API.
+//  *     tags:
+//  *       - Prediction
+//  *     responses:
+//  *       200:
+//  *         description: API berjalan dengan baik
+//  *       500:
+//  *         description: Kesalahan server
+//  */
+// router.get('/', predictControllers.getResponseAPI);
 
 /**
  * @swagger
@@ -47,7 +47,7 @@ router.get('/', predictControllers.getResponseAPI);
  *         description: Kesalahan server
  */
 router.post('/', (req, res, next) => {
-    imageUploader.single("image")(req, res, (err) => {
+    predictUploader.single("image")(req, res, (err) => {
         if (err) {
             return res.status(400).json({ error: err.message });
         }
