@@ -34,6 +34,7 @@
 + Show Created Report by User
 + Show Report with Filter
 + Search Report (Dynamic)
++ Access Image Urls
 
 # Update
 + Merge pull request #5 feature/feature_searching
@@ -42,5 +43,5 @@
 + uuid-ossp
 
 # Todo
-+ Authentication [JWT/Firebase]
-+ Development
++ Authentications [JWT/Firebase]
++ Deployments to AWS

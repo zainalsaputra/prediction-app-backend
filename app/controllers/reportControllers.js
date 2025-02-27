@@ -45,7 +45,7 @@ class ReportsController {
             let imageUrl = null;
 
             if (req.file) {
-                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${Date.now()}`.toLowerCase();
+                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
                 const result = await new Promise((resolve, reject) => {
                     cloudinary.uploader.upload_stream(
                         {
@@ -290,7 +290,7 @@ class ReportsController {
                     }
                 }
 
-                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${Date.now()}`.toLowerCase();
+                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
                 const result = await new Promise((resolve, reject) => {
                     cloudinary.uploader.upload_stream(
                         {
