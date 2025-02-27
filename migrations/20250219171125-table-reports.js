@@ -10,7 +10,7 @@ module.exports = {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       image: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       type_report: {

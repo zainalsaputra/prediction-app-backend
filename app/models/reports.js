@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const moment = require('moment');
 
 class Reports extends Model {
   static associate(models) {
@@ -51,12 +52,18 @@ class Reports extends Model {
         createdAt: {
           allowNull: false,
           type: DataTypes.DATE,
-          defaultValue: Sequelize.fn('NOW'), 
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'"),
+          get() {
+            return moment.utc(this.getDataValue("createdAt")).tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
+          },
         },
         updatedAt: {
           allowNull: false,
           type: DataTypes.DATE,
-          defaultValue: Sequelize.fn('NOW'),
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'"),
+          get() {
+            return moment.utc(this.getDataValue("updatedAt")).tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
+          },
         },
       },
       {
