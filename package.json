@@ -36,7 +36,7 @@
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
-    "uninstall": "^0.0.0"
+    "uninstall": "^0.0.0",
     "swagger-ui-dist": "^5.18.3",
     "swagger-ui-express": "^5.0.1"
   },
