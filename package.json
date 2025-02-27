@@ -36,9 +36,10 @@
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
-    "uninstall": "^0.0.0",
     "swagger-ui-dist": "^5.18.3",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "uninstall": "^0.0.0",
+    "z-schema": "^6.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
