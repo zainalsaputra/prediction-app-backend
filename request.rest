@@ -1,11 +1,11 @@
 GET http://localhost:3000
 
 ###
-GET http://localhost:3000/courses
+GET http://localhost:3000/reports
 
 
 ###
-POST http://localhost:3000/report
+POST http://localhost:3000/reports
 Content-Type: application/json
 
 {

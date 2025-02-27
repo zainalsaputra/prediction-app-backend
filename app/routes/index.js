@@ -1,4 +1,3 @@
-// routes/courseRoutes.js
 const express = require('express');
 
 const app = express();
@@ -10,12 +9,12 @@ const router = express.Router();
 
 app.use(router);
 
-// router.use((req, res) => {
-//   res.send({
-//     status: true,
-//     data: 'hello dek',
-//   });
-// });
+router.get(('/'), (req, res) => {
+  res.send({
+    status: 'success',
+    message: `View documentation API on ${ req.get('host') }/docs`,
+  });
+});
 
 router.use('/predict', predictRoutes);
 router.use('/reports', reportRoutes);
