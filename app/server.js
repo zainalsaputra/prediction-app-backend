@@ -28,12 +28,12 @@ app.use(errorHandler);
 
 setupSwagger(app);
 
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on PORT : ${PORT}`);
-//   console.log("Swagger docs available at http://localhost:3000/docs");
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running on PORT : ${PORT}`);
+  console.log("Swagger docs available at http://localhost:3000/docs");
+});
 
 const db = require('./models');
 
