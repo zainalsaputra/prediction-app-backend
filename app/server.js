@@ -19,11 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const routes = require('./routes/index');
-
-const errorHandler = require('./middleware/errorHandler');
-
 app.use(routes);
 
+const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 
 setupSwagger(app);
