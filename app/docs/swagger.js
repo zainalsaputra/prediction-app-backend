@@ -20,7 +20,7 @@ const swaggerOptions = {
         servers: [
             {
 
-                url: process.env.BASE_URL || "https://prediction-app-backend.vercel.app",
+                url: process.env.BASE_URL || "https://sec-prediction-app-backend.vercel.app",
               
             },
             // {
