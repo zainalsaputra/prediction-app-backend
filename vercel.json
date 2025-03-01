@@ -12,7 +12,11 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/reports"
+            "destination": "/app/server.js"
+        },
+        {
+            "source": "/reports/(.*)",
+            "destination": "/app/server.js"
         }
     ]
 }
