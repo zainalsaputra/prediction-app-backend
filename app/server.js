@@ -33,6 +33,8 @@ setupSwagger(app);
 //   console.log("Swagger docs available at http://localhost:3000/docs");
 // });
 
+app.listen(3000, () => console.log("Server ready on port 3000."));
+
 const db = require('./models');
 
 db.sequelize
