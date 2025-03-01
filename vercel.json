@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         {
-            "src": "app/server.js",
+            "src": "/app/server.js",
             "use": "@vercel/node",
             "config": {
                 "nodeVersion": "20.x"
@@ -12,7 +12,13 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "app/server.js"
+            "dest": "/app/server.js"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/app/server.js"
         }
     ]
 }
