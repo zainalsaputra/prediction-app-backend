@@ -21,12 +21,16 @@ class ReportsController {
         let publicId = null;
         try {
             const { error } = createReportSchema.validate(req.body);
+            // if (error) {
+            //     if (req.file) {
+            //         fs.unlink(req.file.path, (err) => {
+            //             if (err) console.error('Error deleting file:', err);
+            //         });
+            //     }
+            //     return next(createError(400, error.details[0].message));
+            // }
+
             if (error) {
-                if (req.file) {
-                    fs.unlink(req.file.path, (err) => {
-                        if (err) console.error('Error deleting file:', err);
-                    });
-                }
                 return next(createError(400, error.details[0].message));
             }
 

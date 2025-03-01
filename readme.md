@@ -12,7 +12,7 @@
 + ESLint
 + AWS
 + Vercel
-+ Swagger
++ Swagger [bug interface on vercel]
 + multer
 + Axios
 + nodemon
