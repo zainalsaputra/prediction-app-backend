@@ -12,6 +12,7 @@ const {
 const PostReportServices = require('../services/postReportServices');
 const ReportServices = require('../services/reportServices');
 const UsersServices = require('../services/usersServices');
+const NotificationServices = require('../services/notificationServices');
 
 class PostReportsController {
     static async createPostReport(req, res, next) {
@@ -118,6 +119,12 @@ class PostReportsController {
             };
 
             const updatedReport = await PostReportServices.updatePostReport(postReportId, updatedData);
+
+            await NotificationServices.createNotification({
+                userId: existingPostReport.reportedBy,
+                postReportId,
+                message: `Your report has been updated to '${req.body.status}'.`,
+            });    
 
             return res.status(200).json({
                 status: 'success',

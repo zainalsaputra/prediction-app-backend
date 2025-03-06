@@ -2,25 +2,15 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('post_reports', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('notifications', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      postId: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: 'reports',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      reportedBy: {
+      userId: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -30,14 +20,24 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      reason: {
+      postReportId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: 'post_reports',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      message: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      status: {
+      isRead: {
         allowNull: false,
-        type: Sequelize.ENUM('Pending', 'Reviewed', 'Resolved'),
-        defaultValue: 'Pending',
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -52,7 +52,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('post_reports')
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('notifications');
   }
 };
