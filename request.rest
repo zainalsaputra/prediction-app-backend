@@ -3,6 +3,30 @@ GET http://localhost:3000
 ###
 GET http://localhost:3000/reports
 
+###
+GET http://localhost:3000/post/reports
+
+
+###
+POST http://localhost:3000/post/reports
+Content-Type: application/json
+
+{
+    "postId" : "7e6f6f6d-4fe8-401d-a56e-8eaeb6e5b445",
+    "reportedBy" : "b077733d-e727-4cd5-8a6c-88f98f59d7b1",
+    "reason" : "Palsu"
+}
+
+###
+PATCH http://localhost:3000/post/reports/1c20e55a-95c2-4e56-a87b-784eec604c59/status
+Content-Type: application/json
+
+{
+    "status" : "Reviewed"
+}
+
+###
+DELETE  http://localhost:3000/post/reports/fec429a3-168b-4397-b4d4-1cf1ad464328
 
 ###
 POST http://localhost:3000/reports

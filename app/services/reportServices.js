@@ -82,6 +82,11 @@ class ReportsService {
   static async deleteReport(id) {
     return await Reports.destroy({ where: { id } });
   }
+
+  static async checkPostExists(postId) {
+    const post = await Reports.findOne({ where: { id: postId } });
+    return post !== null;
+  }
 }
 
 module.exports = ReportsService;
