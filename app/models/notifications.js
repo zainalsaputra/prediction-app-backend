@@ -1,49 +1,53 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const moment = require('moment');
 
-class PostReports extends Model {
+class Notifications extends Model {
     static associate(models) {
-        this.belongsTo(models.Reports,
-            { foreignKey: 'postId', as: 'post' }
-        );
         this.belongsTo(models.Users,
-            { foreignKey: 'reportedBy', as: 'reporter' }
+            { foreignKey: 'userId', as: 'user' }
+        );
+        this.belongsTo(models.PostReports,
+            { foreignKey: 'postReportId', as: 'postReports' }
         );
     }
 
     static initModel(sequelize) {
-        PostReports.init(
+        Notifications.init(
             {
                 id: {
                     allowNull: false,
                     primaryKey: true,
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     defaultValue: Sequelize.literal('uuid_generate_v4()'),
                 },
-                postId: {
+                userId: {
                     allowNull: false,
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     references: {
-                        model: 'Reports',
+                        model: 'users',
                         key: 'id',
                     },
+                    onUpdate: 'CASCADE',
+                    onDelete: 'CASCADE',
                 },
-                reportedBy: {
+                postReportId: {
                     allowNull: false,
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     references: {
-                        model: 'Users',
+                        model: 'post_reports',
                         key: 'id',
                     },
+                    onUpdate: 'CASCADE',
+                    onDelete: 'CASCADE',
                 },
-                reason: {
+                message: {
                     allowNull: false,
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                 },
-                status: {
+                isRead: {
                     allowNull: false,
-                    type: DataTypes.ENUM('Pending', 'Reviewed', 'Resolved'),
-                    defaultValue: 'Pending',
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
                 },
                 createdAt: {
                     allowNull: false,
@@ -64,12 +68,12 @@ class PostReports extends Model {
             },
             {
                 sequelize,
-                modelName: 'PostReports',
-                tableName: 'post_reports',
+                modelName: 'Notifications',
+                tableName: 'notifications',
                 timestamps: true,
             }
         );
     }
 }
 
-module.exports = PostReports;
+module.exports = Notifications;
