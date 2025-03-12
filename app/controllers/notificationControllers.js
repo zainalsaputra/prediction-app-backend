@@ -60,7 +60,7 @@ class NotificationControllers {
             const getDetailNotification = await NotificationService.getDetailNotificationsById(notificationId);
 
             if (getDetailNotification == null) {
-                return next(createError(400, "Notification ID is required"));
+                return next(createError(400, "Notification ID is incorrect!"));
             }
 
             return res.status(200).json({
@@ -79,7 +79,7 @@ class NotificationControllers {
             if (!notificationId) {
                 return res.status(400).json({ message: 'Notification ID is required!' });
             }
-            
+
             const markAsReadNotification = await NotificationService.updateNotification(notificationId, { 'isRead': true });
 
             return res.status(200).json({
