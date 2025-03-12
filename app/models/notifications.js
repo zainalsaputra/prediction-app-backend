@@ -3,9 +3,13 @@ const moment = require('moment');
 
 class Notifications extends Model {
     static associate(models) {
-        this.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
-        this.belongsTo(models.PostReport, { foreignKey: 'postReportId', as: 'postReport' });
-      }
+        this.belongsTo(models.Users,
+            { foreignKey: 'userId', as: 'user' }
+        );
+        this.belongsTo(models.PostReports,
+            { foreignKey: 'postReportId', as: 'postReports' }
+        );
+    }
 
     static initModel(sequelize) {
         Notifications.init(

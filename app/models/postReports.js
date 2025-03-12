@@ -1,7 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const moment = require('moment');
 
-class PostReport extends Model {
+class PostReports extends Model {
     static associate(models) {
         this.belongsTo(models.Reports,
             { foreignKey: 'postId', as: 'post' }
@@ -12,7 +12,7 @@ class PostReport extends Model {
     }
 
     static initModel(sequelize) {
-        PostReport.init(
+        PostReports.init(
             {
                 id: {
                     allowNull: false,
@@ -64,7 +64,7 @@ class PostReport extends Model {
             },
             {
                 sequelize,
-                modelName: 'PostReport',
+                modelName: 'PostReports',
                 tableName: 'post_reports',
                 timestamps: true,
             }
@@ -72,4 +72,4 @@ class PostReport extends Model {
     }
 }
 
-module.exports = PostReport;
+module.exports = PostReports;
