@@ -12,7 +12,7 @@ class NotificationServices {
             {
                 where: { userId },
                 order: [['createdAt', 'DESC']],
-                attributes: ['id', 'message','isRead', 'createdAt', 'updatedAt'],
+                attributes: ['id', 'message', 'isRead', 'createdAt', 'updatedAt'],
                 include: [
                     {
                         model: Users,
@@ -36,7 +36,7 @@ class NotificationServices {
     static async getDetailNotificationsById(id) {
         return await Notifications.findOne({
             where: { id },
-            attributes: ['id', 'message','isRead', 'createdAt', 'updatedAt'],
+            attributes: ['id', 'message', 'isRead', 'createdAt', 'updatedAt'],
             include: [
                 {
                     model: Users,
@@ -52,7 +52,6 @@ class NotificationServices {
         });
     }
 
-
     static async updateNotification(id, data) {
         return await Notifications.update(data,
             {
@@ -60,6 +59,12 @@ class NotificationServices {
                 returning: true,
             }
         );
+    }
+
+    static async deleteNotificationById(id) {
+        return await Notifications.destroy({
+            where: { id }
+        });
     }
 }
 

@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const NotificationService = require('../services/notificationServices');
+const UsersServices = require('../services/usersServices');
 
 const {
     getNotificationsByUserIdSchema,
@@ -16,6 +17,12 @@ class NotificationControllers {
             if (error) {
                 return next(createError(400, error.details[0].message));
             }
+
+            const userExists = await UsersServices.checkUserExists(userId);
+            if (!userExists) {
+                return next(createError(404, 'User is not registered in our database!'));
+            }
+
 
             const notifications = await NotificationService.getNotificationsByUser(userId);
 
@@ -51,16 +58,22 @@ class NotificationControllers {
         try {
             const notificationId = req.params.id;
 
-            const { error } = getDetailNotificationSchema.validate({id: notificationId });
+            const { error } = getDetailNotificationSchema.validate({ id: notificationId });
 
             if (error) {
                 return next(createError(400, error.details[0].message));
             }
 
+            const existingNotification = await NotificationService.getNotificationsById(notificationId);
+
+            if (!existingNotification) {
+                return next(createError(400, `Notification with id '${notificationId}' not found!`));
+            }
+
             const getDetailNotification = await NotificationService.getDetailNotificationsById(notificationId);
 
             if (getDetailNotification == null) {
-                return next(createError(400, "Notification ID is incorrect!"));
+                return next(createError(400, "No changes applied on database!"));
             }
 
             return res.status(200).json({
@@ -76,11 +89,24 @@ class NotificationControllers {
     static async markAsRead(req, res, next) {
         try {
             const notificationId = req.params.id;
-            if (!notificationId) {
-                return res.status(400).json({ message: 'Notification ID is required!' });
+
+            const { error } = getDetailNotificationSchema.validate({ id: notificationId });
+
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const existingNotification = await NotificationService.getNotificationsById(notificationId);
+
+            if (!existingNotification) {
+                return next(createError(400, `Notification with id '${notificationId}' not found!`));
             }
 
             const markAsReadNotification = await NotificationService.updateNotification(notificationId, { 'isRead': true });
+
+            if (markAsReadNotification[0] == 0) {
+                return next(createError(400, "No changes applied on database!"));
+            }
 
             return res.status(200).json({
                 status: 'success',
@@ -96,10 +122,24 @@ class NotificationControllers {
     static async viewStatus(req, res, next) {
         try {
             const notificationId = req.params.id;
-            if (!notificationId) {
-                return res.status(400).json({ message: 'Notification ID is required!' });
+
+            const { error } = getDetailNotificationSchema.validate({ id: notificationId });
+
+            if (error) {
+                return next(createError(400, error.details[0].message));
             }
+
+            const existingNotification = await NotificationService.getNotificationsById(notificationId);
+
+            if (!existingNotification) {
+                return next(createError(400, `Notification with id '${notificationId}' not found!`));
+            }
+
             const viewStatusNotification = await NotificationService.getNotificationsById(notificationId);
+
+            if (viewStatusNotification == null) {
+                return next(createError(400, "No changes applied on database!"));
+            }
 
             const splitMessageStatus = viewStatusNotification.message.split("'");
 
@@ -117,6 +157,32 @@ class NotificationControllers {
         }
     }
 
+    static async deleteNotificationById(req, res, next) {
+        try {
+            const notificationId = req.params.id;
+
+            const { error } = getDetailNotificationSchema.validate({ id: notificationId });
+
+            if (error) {
+                next(createError(400, error.details[0].message));
+            }
+
+            const existingNotification = await NotificationService.getNotificationsById(notificationId);
+
+            if (!existingNotification) {
+                return next(createError(400, `Notification with id '${notificationId}' not found!`));
+            }
+
+            await NotificationService.deleteNotificationById(notificationId);
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Notification deleted successfully!'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = NotificationControllers;
