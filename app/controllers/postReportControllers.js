@@ -31,7 +31,7 @@ class PostReportsController {
             if (!postExists) {
                 return next(createError(404, 'Posts is not found!'));
             }
-            
+
             const postReportData = {
                 ...req.body,
             };
@@ -87,9 +87,22 @@ class PostReportsController {
                 });
             }
 
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+
+            const reportsWithImageUrls = reports.map(data => {
+                const reportData = data.toJSON();
+                return {
+                    ...reportData,
+                    post: {
+                        ...reportData.post,
+                        image: reportData.post.image ? `${baseUrl}${reportData.post.image.replace(/\\/g, '/')}` : null,
+                    }
+                };
+            });
+
             return res.status(200).json({
                 status: 'success',
-                data: reports
+                data: reportsWithImageUrls
             });
 
         } catch (error) {
@@ -124,7 +137,7 @@ class PostReportsController {
                 userId: existingPostReport.reportedBy,
                 postReportId,
                 message: `Your report has been updated to '${req.body.status}'.`,
-            });    
+            });
 
             return res.status(200).json({
                 status: 'success',
