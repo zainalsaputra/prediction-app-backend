@@ -31,7 +31,7 @@ class PostReportsController {
             if (!postExists) {
                 return next(createError(404, 'Posts is not found!'));
             }
-            
+
             const postReportData = {
                 ...req.body,
             };
@@ -56,9 +56,10 @@ class PostReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const { postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+            const { id, postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
 
             const reports = await PostReportServices.getFilteredPostReports({
+                id,
                 postId,
                 status,
                 reason,
@@ -70,6 +71,7 @@ class PostReportsController {
             });
 
             let filterMessage = [];
+            if (id) filterMessage.push(`type '${id}'`);
             if (status) filterMessage.push(`type '${status}'`);
             if (reason) filterMessage.push(`reason '${reason}'`);
             if (postId) filterMessage.push(`user ID '${postId}'`);
@@ -87,13 +89,46 @@ class PostReportsController {
                 });
             }
 
+            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+
+            const reportsWithImageUrls = reports.map(data => {
+                const reportData = data.toJSON();
+                return {
+                    ...reportData,
+                    post: {
+                        ...reportData.post,
+                        image: reportData.post.image ? `${baseUrl}${reportData.post.image.replace(/\\/g, '/')}` : null,
+                    }
+                };
+            });
+
             return res.status(200).json({
                 status: 'success',
-                data: reports
+                data: reportsWithImageUrls
             });
 
         } catch (error) {
             next(error);
+        }
+    }
+
+    static async getStatusPostReport(req, res, next) {
+        try {
+            const postReportId = req.params.id;
+
+            const { error } = searchPostReportsSchema.validate({ id: postReportId });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const getStatusPostReport = await PostReportServices.getPostReportById(postReportId);
+
+            return res.status(200).json({
+                status: 'success',
+                data: getStatusPostReport.status
+            });
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -108,7 +143,7 @@ class PostReportsController {
 
             const existingPostReport = await PostReportServices.getPostReportById(postReportId);
             if (!existingPostReport) {
-                return next(createError(404, 'Report not found!'));
+                return next(createError(404, 'Post Report not found!'));
             }
 
             const updatedAt = moment().tz("Asia/Jakarta").format();
@@ -124,7 +159,7 @@ class PostReportsController {
                 userId: existingPostReport.reportedBy,
                 postReportId,
                 message: `Your report has been updated to '${req.body.status}'.`,
-            });    
+            });
 
             return res.status(200).json({
                 status: 'success',

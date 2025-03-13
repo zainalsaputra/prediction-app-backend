@@ -22,9 +22,17 @@ const createPostReportSchema = Joi.object({
 });
 
 const searchPostReportsSchema = Joi.object({
-    userId: Joi.string().uuid().optional().messages({
-        'string.base': 'User ID must be a string',
-        'string.guid': 'User ID must be a valid UUID',
+    id: Joi.string().uuid().optional().messages({
+        'string.base': 'ID must be a string',
+        'string.guid': 'ID must be a valid UUID',
+    }),
+    postId: Joi.string().uuid().optional().messages({
+        'string.base': 'POST ID must be a string',
+        'string.guid': 'POST ID must be a valid UUID',
+    }),
+    reportedBy: Joi.string().uuid().optional().messages({
+        'string.base': 'POST ID must be a string',
+        'string.guid': 'POST ID must be a valid UUID',
     }),
    status: Joi.string().optional().valid('Pending', 'Reviewed', 'Resolved').messages({
         'string.base': 'User ID must be a string',
