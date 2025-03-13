@@ -56,9 +56,10 @@ class PostReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const { postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+            const { id ,postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
 
             const reports = await PostReportServices.getFilteredPostReports({
+                id,
                 postId,
                 status,
                 reason,
@@ -70,6 +71,7 @@ class PostReportsController {
             });
 
             let filterMessage = [];
+            if (id) filterMessage.push(`type '${id}'`);
             if (status) filterMessage.push(`type '${status}'`);
             if (reason) filterMessage.push(`reason '${reason}'`);
             if (postId) filterMessage.push(`user ID '${postId}'`);
@@ -121,7 +123,7 @@ class PostReportsController {
 
             const existingPostReport = await PostReportServices.getPostReportById(postReportId);
             if (!existingPostReport) {
-                return next(createError(404, 'Report not found!'));
+                return next(createError(404, 'Post Report not found!'));
             }
 
             const updatedAt = moment().tz("Asia/Jakarta").format();

@@ -11,17 +11,21 @@ class postReportsService {
     return result;
   }
 
-  static async getFilteredPostReports({ status, reportedBy, postId, reason, startDate, endDate, sortBy, order }) {
+  static async getFilteredPostReports({ id, status, reportedByUserId, postId, reason, startDate, endDate, sortBy, order }) {
     let filterConditions = {};
 
+    if (id) {
+      filterConditions.id = id;
+    }
     if (postId) {
-      filterConditions.postId = { [Op.iLike]: `%${postId}%` };
+      filterConditions.postId = postId;
     }
     if (status) {
-      filterConditions.status = { [Op.iLike]: `%${status}%` };
+      filterConditions.status = status;
+      
     }
-    if (reportedBy) {
-      filterConditions.reportedBy = { [Op.iLike]: `%${reportedBy}%` };
+    if (reportedByUserId) {
+      filterConditions.reportedByUserId = reportedByUserId;
     }
     if (reason) {
       filterConditions.reason = { [Op.iLike]: `%${reason}%` };
@@ -74,7 +78,12 @@ class postReportsService {
   }
 
   static async updatePostReport(id, body) {
-    const [updated] = await PostReports.update(body, { where: { id } });
+    const updated = await PostReports.update(body,
+      {
+        where: { id },
+        returning: true,
+      }
+    );
 
     return updated;
   }
