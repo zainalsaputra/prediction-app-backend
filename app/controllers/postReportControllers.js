@@ -56,7 +56,7 @@ class PostReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const { id ,postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+            const { id, postId, status, reason, reportedBy, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
 
             const reports = await PostReportServices.getFilteredPostReports({
                 id,
@@ -109,6 +109,26 @@ class PostReportsController {
 
         } catch (error) {
             next(error);
+        }
+    }
+
+    static async getStatusPostReport(req, res, next) {
+        try {
+            const postReportId = req.params.id;
+
+            const { error } = searchPostReportsSchema.validate({ id: postReportId });
+            if (error) {
+                return next(createError(400, error.details[0].message));
+            }
+
+            const getStatusPostReport = await PostReportServices.getPostReportById(postReportId);
+
+            return res.status(200).json({
+                status: 'success',
+                data: getStatusPostReport.status
+            });
+        } catch (error) {
+            next(error)
         }
     }
 

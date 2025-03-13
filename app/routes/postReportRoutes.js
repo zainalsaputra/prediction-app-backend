@@ -6,6 +6,8 @@ router.post('/', PostReportsController.createPostReport);
 
 router.get('/', PostReportsController.getAllWithFilteredPostReports);
 
+router.get('/:id/status', PostReportsController. getStatusPostReport);
+
 router.patch('/:id/status', PostReportsController. updateStatusPostReport);
 
 router.delete('/:id', PostReportsController.deletePostReport);
