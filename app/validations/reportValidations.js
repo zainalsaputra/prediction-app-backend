@@ -18,10 +18,25 @@ const createReportSchema = Joi.object({
         'string.empty': 'Description cannot be empty',
         'any.required': 'Description is required',
     }),
-    region: Joi.string().required().messages({
-        'string.base': 'Region must be a string',
-        'string.empty': 'Region cannot be empty',
-        'any.required': 'Region is required',
+    province: Joi.string().required().messages({
+        'string.base': 'Province must be a string',
+        'string.empty': 'Province cannot be empty',
+        'any.required': 'Province is required',
+    }),
+    district: Joi.string().required().messages({
+        'string.base': 'District must be a string',
+        'string.empty': 'District cannot be empty',
+        'any.required': 'District is required',
+    }),
+    subdistrict: Joi.string().required().messages({
+        'string.base': 'Subdistrict must be a string',
+        'string.empty': 'Subdistrict cannot be empty',
+        'any.required': 'Subdistrict is required',
+    }),
+    village: Joi.string().required().messages({
+        'string.base': 'Village must be a string',
+        'string.empty': 'Village cannot be empty',
+        'any.required': 'Village is required',
     }),
     longitude: Joi.number().precision(8).required().messages({
         'number.base': 'Longitude must be a number',
@@ -50,6 +65,12 @@ const updateReportSchema = Joi.object({
         'string.guid': 'ID must be a valid UUID',
         'any.required': 'ID is required',
     }),
+    userId: Joi.string().uuid().required().messages({
+        'string.base': 'ID must be a string',
+        'string.empty': 'ID cannot be empty',
+        'string.guid': 'ID must be a valid UUID',
+        'any.required': 'ID is required',
+    }),
     type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').optional().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
@@ -59,9 +80,25 @@ const updateReportSchema = Joi.object({
         'string.base': 'Description must be a string',
         'string.empty': 'Description cannot be empty',
     }),
-    region: Joi.string().optional().messages({
-        'string.base': 'Region must be a string',
-        'string.empty': 'Region cannot be empty',
+    province: Joi.string().required().messages({
+        'string.base': 'Province must be a string',
+        'string.empty': 'Province cannot be empty',
+        'any.required': 'Province is required',
+    }),
+    district: Joi.string().required().messages({
+        'string.base': 'District must be a string',
+        'string.empty': 'District cannot be empty',
+        'any.required': 'District is required',
+    }),
+    subdistrict: Joi.string().required().messages({
+        'string.base': 'Subdistrict must be a string',
+        'string.empty': 'Subdistrict cannot be empty',
+        'any.required': 'Subdistrict is required',
+    }),
+    village: Joi.string().required().messages({
+        'string.base': 'Village must be a string',
+        'string.empty': 'Village cannot be empty',
+        'any.required': 'Village is required',
     }),
     longitude: Joi.number().precision(8).optional().messages({
         'number.base': 'Longitude must be a number',
@@ -101,8 +138,17 @@ const searchReportsSchema = Joi.object({
         'string.base': 'Type report must be a string',
         'any.only': 'Invalid report type',
     }),
-    region: Joi.string().optional().messages({
-        'string.base': 'Region must be a string',
+    province: Joi.string().optional().messages({
+        'string.base': 'Province must be a string',
+    }),
+    district: Joi.string().optional().messages({
+        'string.base': 'District must be a string',
+    }),
+    subdistrict: Joi.string().optional().messages({
+        'string.base': 'Subdistrict must be a string',
+    }),
+    village: Joi.string().optional().messages({
+        'string.base': 'Village must be a string',
     }),
     userId: Joi.string().uuid().optional().messages({
         'string.base': 'User ID must be a string',
@@ -115,7 +161,7 @@ const searchReportsSchema = Joi.object({
         'date.base': 'End date must be a valid date in YYYY-MM-DD format',
         'date.greater': 'End date must be later than start date',
     }),
-    sortBy: Joi.string().valid('createdAt', 'updatedAt', 'type_report', 'region').optional().messages({
+    sortBy: Joi.string().valid('createdAt', 'updatedAt', 'type_report', 'province').optional().messages({
         'string.base': 'Sort field must be a string',
         'any.only': 'Invalid sorting field',
     }),

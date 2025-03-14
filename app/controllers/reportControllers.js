@@ -65,11 +65,14 @@ class ReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const { type_report, region, userId, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+            const { type_report, province, district, subdistrict, village, userId, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
 
             const reports = await ReportService.getFilteredReports({
                 type_report,
-                region,
+                province,
+                district, 
+                subdistrict, 
+                village,
                 userId,
                 startDate,
                 endDate,
@@ -79,7 +82,10 @@ class ReportsController {
 
             let filterMessage = [];
             if (type_report) filterMessage.push(`type '${type_report}'`);
-            if (region) filterMessage.push(`region '${region}'`);
+            if (province) filterMessage.push(`province '${province}'`);
+            if (district) filterMessage.push(`district '${district}'`);
+            if (subdistrict) filterMessage.push(`subdistrict '${subdistrict}'`);
+            if (village) filterMessage.push(`village '${village}'`);
             if (userId) filterMessage.push(`user ID '${userId}'`);
             if (startDate) filterMessage.push(`from '${startDate}'`);
             if (endDate) filterMessage.push(`until '${endDate}'`);
@@ -104,7 +110,10 @@ class ReportsController {
                     image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    region: reportData.region,
+                    province: reportData.province,
+                    district: reportData.district,
+                    subdistrict: reportData.subdistrict,
+                    village: reportData.village,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     createdAt: reportData.createdAt,
@@ -145,7 +154,10 @@ class ReportsController {
                 image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                 type_report: reportData.type_report,
                 description: reportData.description,
-                region: reportData.region,
+                province: reportData.province,
+                    district: reportData.district,
+                    subdistrict: reportData.subdistrict,
+                    village: reportData.village,
                 longitude: reportData.longitude,
                 latitude: reportData.latitude,
                 createdAt: reportData.createdAt,
@@ -186,7 +198,10 @@ class ReportsController {
                     image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    region: reportData.region,
+                    province: reportData.province,
+                    district: reportData.district,
+                    subdistrict: reportData.subdistrict,
+                    village: reportData.village,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     createdAt: reportData.createdAt,
