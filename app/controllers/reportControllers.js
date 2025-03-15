@@ -33,7 +33,7 @@ class ReportsController {
             }
 
             const imagePath = req.file ? req.file.path : null;
-            
+
             const reportData = {
                 ...req.body,
                 image: imagePath
@@ -70,8 +70,8 @@ class ReportsController {
             const reports = await ReportService.getFilteredReports({
                 type_report,
                 province,
-                district, 
-                subdistrict, 
+                district,
+                subdistrict,
                 village,
                 userId,
                 startDate,
@@ -114,6 +114,7 @@ class ReportsController {
                     district: reportData.district,
                     subdistrict: reportData.subdistrict,
                     village: reportData.village,
+                    address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     createdAt: reportData.createdAt,
@@ -155,9 +156,10 @@ class ReportsController {
                 type_report: reportData.type_report,
                 description: reportData.description,
                 province: reportData.province,
-                    district: reportData.district,
-                    subdistrict: reportData.subdistrict,
-                    village: reportData.village,
+                district: reportData.district,
+                subdistrict: reportData.subdistrict,
+                village: reportData.village,
+                address_detail: reportData.address_detail,
                 longitude: reportData.longitude,
                 latitude: reportData.latitude,
                 createdAt: reportData.createdAt,
@@ -202,6 +204,7 @@ class ReportsController {
                     district: reportData.district,
                     subdistrict: reportData.subdistrict,
                     village: reportData.village,
+                    address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     createdAt: reportData.createdAt,

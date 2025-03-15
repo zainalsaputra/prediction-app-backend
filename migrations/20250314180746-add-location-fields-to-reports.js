@@ -18,6 +18,11 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
     });
+    
+    await queryInterface.addColumn('reports', 'address_detail', {
+      type: Sequelize.STRING,
+      allowNull: true,
+    });
 
     await queryInterface.renameColumn('reports', 'region', 'province');
   },

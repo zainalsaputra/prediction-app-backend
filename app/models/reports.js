@@ -53,6 +53,10 @@ class Reports extends Model {
           allowNull: true,
           type: DataTypes.STRING,
         },
+        address_detail: {
+          allowNull: true,
+          type: DataTypes.STRING,
+        },
         longitude: {
           allowNull: false,
           type: DataTypes.DECIMAL(11, 8),

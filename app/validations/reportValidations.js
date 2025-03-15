@@ -38,6 +38,11 @@ const createReportSchema = Joi.object({
         'string.empty': 'Village cannot be empty',
         'any.required': 'Village is required',
     }),
+    address_detail: Joi.string().optional().messages({
+        'string.base': 'Address Detail must be a string',
+        'string.empty': 'Address Detail cannot be empty',
+        'any.required': 'Address Detail is required',
+    }),
     longitude: Joi.number().precision(8).required().messages({
         'number.base': 'Longitude must be a number',
         'any.required': 'Longitude is required',
@@ -99,6 +104,11 @@ const updateReportSchema = Joi.object({
         'string.base': 'Village must be a string',
         'string.empty': 'Village cannot be empty',
         'any.required': 'Village is required',
+    }),
+    address_detail: Joi.string().optional().messages({
+        'string.base': 'Address Detail must be a string',
+        'string.empty': 'Address Detail cannot be empty',
+        'any.required': 'Address Detail is required',
     }),
     longitude: Joi.number().precision(8).optional().messages({
         'number.base': 'Longitude must be a number',

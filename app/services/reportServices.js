@@ -64,7 +64,11 @@ class ReportsService {
 
 
   static async getReportById(id) {
-    return await Reports.findOne({ where: { id } });
+    return await Reports.findOne(
+      {
+        where: { id }
+      },
+    );
   }
 
   static async getReportsByUserId(userId) {
@@ -79,6 +83,7 @@ class ReportsService {
           // attributes: ['id', 'type_report', 'description', 'province', 'longitude', 'latitude', 'image', 'createdAt', 'updatedAt',],
         },
       ],
+      order: [['reports', 'updatedAt', 'DESC']],
     });
   }
 
