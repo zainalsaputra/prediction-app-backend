@@ -23,7 +23,7 @@ POST http://localhost:3000/post/reports
 Content-Type: application/json
 
 {
-    "postId" : "5507aad8-f10b-4f78-9d8e-f38eb8b75eaf",
+    "postId" : "26c83884-9acd-411f-97d1-4ce3a2b8f04d",
     "reportedBy" : "b077733d-e727-4cd5-8a6c-88f98f59d7b2",
     "reason" : "Tidak Relavan"
 }
