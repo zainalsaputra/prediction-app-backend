@@ -184,7 +184,7 @@
 + ESLint
 + AWS
 + Vercel
-+ Swagger
++ Swagger [bug interface on vercel]
 + multer
 + Axios
 + nodemon
@@ -215,5 +215,6 @@
 + uuid-ossp
 
 # Todo
++ Post Reporting Feature
 + Authentications [JWT/Firebase]
 + Deployments to AWS
