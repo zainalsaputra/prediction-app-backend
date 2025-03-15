@@ -3,16 +3,51 @@ GET http://localhost:3000
 ###
 GET http://localhost:3000/reports
 
+###
+GET http://localhost:3000/post/reports
+
+###
+GET http://localhost:3000/notifications?userId=b077733d-e727-4cd5-8a6c-88f98f59d7b1
+
+###
+GET http://localhost:3000/notifications/7bde4442-c673-487e-ba3f-c85c2eaee066
+
+###
+GET http://localhost:3000/notifications/7bde4442-c673-487e-ba3f-c85c2eaee066/read
+
+###
+GET http://localhost:3000/notifications/7bde4442-c673-487e-ba3f-c85c2eaee066/status
+
+###
+POST http://localhost:3000/post/reports
+Content-Type: application/json
+
+{
+    "postId" : "5507aad8-f10b-4f78-9d8e-f38eb8b75eaf",
+    "reportedBy" : "b077733d-e727-4cd5-8a6c-88f98f59d7b2",
+    "reason" : "Tidak Relavan"
+}
+
+###
+PATCH http://localhost:3000/post/reports/6b4538a9-acde-4ea2-b05c-0d55c8ffe49a/status
+Content-Type: application/json
+
+{
+    "status" : "Reviewed"
+}
+
+###
+DELETE  http://localhost:3000/post/reports/fec429a3-168b-4397-b4d4-1cf1ad464328
 
 ###
 POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-    "image" : "https://aws.storage-s3.com/21d8h92yy1232",
     "type_report" : "Rumah Retak",
     "description" : "62812",
     "location" : "jcodhwsdv",
+    "region" : "Jakarta Pusat",
     "userId" : "b077733d-e727-4cd5-8a6c-88f98f59d7b1"
 }
 

@@ -37,8 +37,24 @@ class Reports extends Model {
           allowNull: false,
           type: DataTypes.TEXT,
         },
-        region: {
+        province: {
           allowNull: false,
+          type: DataTypes.STRING,
+        },
+        district: {
+          allowNull: true,
+          type: DataTypes.STRING,
+        },
+        subdistrict: {
+          allowNull: true,
+          type: DataTypes.STRING,
+        },
+        village: {
+          allowNull: true,
+          type: DataTypes.STRING,
+        },
+        address_detail: {
+          allowNull: true,
           type: DataTypes.STRING,
         },
         longitude: {

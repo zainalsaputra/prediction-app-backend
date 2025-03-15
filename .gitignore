@@ -1,5 +1,7 @@
 node_modules
 .env
+uploads
 !.gitkeep
 draft
+socket-client.js
 .vercel

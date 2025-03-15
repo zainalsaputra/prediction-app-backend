@@ -4,6 +4,8 @@ const app = express();
 
 const predictRoutes = require('./predictRoutes');
 const reportRoutes = require('./reportRoutes');
+const postReportRoutes = require('./postReportRoutes');
+const notificationRoutes = require('./notificationRoutes');
 
 const router = express.Router();
 
@@ -18,6 +20,8 @@ router.get(('/'), (req, res) => {
 
 router.use('/predict', predictRoutes);
 router.use('/reports', reportRoutes);
+router.use('/post/reports', postReportRoutes);
+router.use('/notifications', notificationRoutes);
 
 // router.use(viewEngines);
 
