@@ -70,12 +70,6 @@ const updateReportSchema = Joi.object({
         'string.guid': 'ID must be a valid UUID',
         'any.required': 'ID is required',
     }),
-    userId: Joi.string().uuid().required().messages({
-        'string.base': 'ID must be a string',
-        'string.empty': 'ID cannot be empty',
-        'string.guid': 'ID must be a valid UUID',
-        'any.required': 'ID is required',
-    }),
     type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').optional().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
