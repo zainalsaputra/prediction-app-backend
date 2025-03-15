@@ -2,16 +2,16 @@ const Joi = require('joi');
 
 const createPostReportSchema = Joi.object({
     postId: Joi.string().uuid().required().messages({
-        'string.base': 'User ID must be a string',
-        'string.empty': 'User ID cannot be empty',
-        'string.guid': 'User ID must be a valid UUID',
-        'any.required': 'User ID is required',
+        'string.base': 'Post ID must be a string',
+        'string.empty': 'Post ID cannot be empty',
+        'string.guid': 'Post ID must be a valid UUID',
+        'any.required': 'Post ID is required',
     }),
     reportedBy: Joi.string().uuid().required().messages({
-        'string.base': 'User ID must be a string',
-        'string.empty': 'User ID cannot be empty',
-        'string.guid': 'User ID must be a valid UUID',
-        'any.required': 'User ID is required',
+        'string.base': 'User ID / ReportedBy must be a string',
+        'string.empty': 'User ID / ReportedBy cannot be empty',
+        'string.guid': 'User ID / ReportedBy must be a valid UUID',
+        'any.required': 'User ID / ReportedBy is required',
     }),
     reason: Joi.string().required().valid('Spam', 'Palsu', 'Tidak Relavan').messages({
         'string.base': 'Reason must be a string',
