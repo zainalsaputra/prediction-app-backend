@@ -4,6 +4,8 @@ const router = express.Router();
 
 const predictRoutes = require('./predictRoutes');
 const reportRoutes = require('./reportRoutes');
+const postReportRoutes = require('./postReportRoutes');
+const notificationRoutes = require('./notificationRoutes');
 
 router.get('/', (req, res) => {
   res.send({
@@ -14,5 +16,7 @@ router.get('/', (req, res) => {
 
 router.use('/predict', predictRoutes);
 router.use('/reports', reportRoutes);
+router.use('/post/reports', postReportRoutes);
+router.use('/notifications', notificationRoutes);
 
 module.exports = router;

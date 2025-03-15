@@ -35,6 +35,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
+    "socket.io": "^4.8.1",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-dist": "^5.18.3",
@@ -46,6 +47,7 @@
     "@eslint/js": "^9.20.0",
     "eslint": "^9.20.1",
     "globals": "^15.15.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "socket.io-client": "^4.8.1"
   }
 }

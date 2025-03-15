@@ -27,9 +27,21 @@ const imageUploader = require('../middleware/imageUploader');
  *               description:
  *                 type: string
  *                 example: "Jalan utama mengalami kerusakan parah akibat hujan deras."
- *               region:
+ *               province:
+ *                 type: string
+ *                 example: "Jakarta"
+ *               district:
  *                 type: string
  *                 example: "Jakarta Selatan"
+ *               subdistrict:
+ *                 type: string
+ *                 example: "Kebayoran Baru"
+ *               village:
+ *                 type: string
+ *                 example: "Senayan"
+ *               address_detail:
+ *                 type: string
+ *                 example: "Jalan Sudirman No. 25"
  *               longitude:
  *                 type: number
  *                 format: float
@@ -64,7 +76,7 @@ router.post('/', (req, res, next) => {
  * /reports:
  *   get:
  *     summary: Get all report or Search reports with filters
- *     description: Retrieve reports based on type, region, user ID, and date range.
+ *     description: Retrieve reports based on type, province, user ID, and date range.
  *     tags:
  *       - Reports
  *     parameters:
@@ -73,11 +85,26 @@ router.post('/', (req, res, next) => {
  *         schema:
  *           type: string
  *         description: 'Filter by type of report (e.g., Jalan Rusak, Bencana, Rumah Retak)'
- *       - in: query
- *         name: region
+  *       - in: query
+ *         name: province
  *         schema:
  *           type: string
- *         description: 'Filter by region (e.g., Jakarta Selatan)'
+ *         description: 'Filter by province (e.g., Jakarta)'
+ *       - in: query
+ *         name: district
+ *         schema:
+ *           type: string
+ *         description: 'Filter by district (e.g., Jakarta Selatan)'
+ *       - in: query
+ *         name: subdistrict
+ *         schema:
+ *           type: string
+ *         description: 'Filter by subdistrict (e.g., Kebayoran Baru)'
+ *       - in: query
+ *         name: village
+ *         schema:
+ *           type: string
+ *         description: 'Filter by village (e.g., Senayan)'
  *       - in: query
  *         name: userId
  *         schema:
@@ -100,16 +127,14 @@ router.post('/', (req, res, next) => {
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, updatedAt, type_report, region]
- *           default: createdAt  # ✅ Default sorting
- *         description: 'Sort results by field'
+ *           enum: [createdAt, updatedAt, type_report, province]
+ *           default: createdAt
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum: [ASC, DESC]
- *           default: ASC  # ✅ Default order
- *         description: 'Sort order (ASC or DESC)'
+ *           default: ASC
  *     responses:
  *       200:
  *         description: Successfully retrieved filtered reports
@@ -138,7 +163,7 @@ router.post('/', (req, res, next) => {
  *                       description:
  *                         type: string
  *                         example: Jalan berlubang parah di Jakarta Selatan.
- *                       region:
+ *                       province:
  *                         type: string
  *                         example: Jakarta Selatan
  *                       longitude:
@@ -214,9 +239,21 @@ router.get('/user/:userId', reportControllers.getReportsByUserId);
  *               description:
  *                 type: string
  *                 example: "Jalan utama mengalami kerusakan parah akibat hujan deras."
- *               region:
+ *               province:
+ *                 type: string
+ *                 example: "Jakarta"
+ *               district:
  *                 type: string
  *                 example: "Jakarta Selatan"
+ *               subdistrict:
+ *                 type: string
+ *                 example: "Kebayoran Baru"
+ *               village:
+ *                 type: string
+ *                 example: "Senayan"
+ *               address_detail:
+ *                 type: string
+ *                 example: "Jalan Sudirman No. 25"
  *               longitude:
  *                 type: number
  *                 format: float

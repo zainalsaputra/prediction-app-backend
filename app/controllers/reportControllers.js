@@ -108,11 +108,14 @@ class ReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const { type_report, region, userId, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
+            const { type_report, province, district, subdistrict, village, userId, startDate, endDate, sortBy = 'createdAt', order = 'DESC' } = value;
 
             const reports = await ReportService.getFilteredReports({
                 type_report,
-                region,
+                province,
+                district,
+                subdistrict,
+                village,
                 userId,
                 startDate,
                 endDate,
@@ -122,7 +125,10 @@ class ReportsController {
 
             let filterMessage = [];
             if (type_report) filterMessage.push(`type '${type_report}'`);
-            if (region) filterMessage.push(`region '${region}'`);
+            if (province) filterMessage.push(`province '${province}'`);
+            if (district) filterMessage.push(`district '${district}'`);
+            if (subdistrict) filterMessage.push(`subdistrict '${subdistrict}'`);
+            if (village) filterMessage.push(`village '${village}'`);
             if (userId) filterMessage.push(`user ID '${userId}'`);
             if (startDate) filterMessage.push(`from '${startDate}'`);
             if (endDate) filterMessage.push(`until '${endDate}'`);
@@ -147,7 +153,11 @@ class ReportsController {
                     // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    region: reportData.region,
+                    province: reportData.province,
+                    district: reportData.district,
+                    subdistrict: reportData.subdistrict,
+                    village: reportData.village,
+                    address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     image: reportData.image,
@@ -180,6 +190,7 @@ class ReportsController {
                 return next(createError(404, 'Report not found!'));
             }
 
+
             // const baseUrl = `${req.protocol}://${req.get('host')}/`;
             // const reportData = report.toJSON();
 
@@ -189,7 +200,11 @@ class ReportsController {
                 // image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null,
                 type_report: report.type_report,
                 description: report.description,
-                region: report.region,
+                province: report.province,
+                district: report.district,
+                subdistrict: report.subdistrict,
+                village: report.village,
+                address_detail: reportData.address_detail,
                 longitude: report.longitude,
                 latitude: report.latitude,
                 image: report.image,
@@ -231,7 +246,11 @@ class ReportsController {
                     // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    region: reportData.region,
+                    province: reportData.province,
+                    district: reportData.district,
+                    subdistrict: reportData.subdistrict,
+                    village: reportData.village,
+                    address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
                     image: reportData.image,
