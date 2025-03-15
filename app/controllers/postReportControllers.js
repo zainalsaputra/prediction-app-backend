@@ -38,6 +38,11 @@ class PostReportsController {
 
             const response = await PostReportServices.createPostReport(postReportData);
 
+            const io = req.app.get('socketio');
+            io.to(response.reportedBy.toString()).emit('post_reported', {
+                message: `Post has been been successfully reported with '${response.status}' status!`,
+            });
+
             return res.status(201).json({
                 status: 'success',
                 message: 'Posts successfully reported!',
@@ -158,13 +163,13 @@ class PostReportsController {
             if (!updatedReports || updatedReports.length === 0) {
                 return next(createError(500, 'Failed to update post report status!'));
             }
-    
-            const updatedReport = updatedReports[0];
+
+            // const updatedReport = updatedReports[0];
 
             const io = req.app.get('socketio');
             io.to(existingPostReport.reportedBy.toString()).emit('post_status_updated', {
                 message: `Your report status has been updated to '${req.body.status}'!`,
-                data: updatedReport,
+                // data: updatedReport,
             });
 
             await NotificationServices.createNotification({
