@@ -27,8 +27,8 @@ class PostReportsController {
                 return next(createError(404, 'User is not registered in our database!'));
             }
 
-            const postExists = await ReportServices.checkPostExists(req.body.postId);
-            if (!postExists) {
+            const existingPostReport = await ReportServices.checkPostExists(req.body.postId);
+            if (!existingPostReport) {
                 return next(createError(404, 'Posts is not found!'));
             }
 
@@ -37,6 +37,11 @@ class PostReportsController {
             };
 
             const response = await PostReportServices.createPostReport(postReportData);
+
+            const io = req.app.get('socketio');
+            io.to(response.reportedBy.toString()).emit('post_reported', {
+                message: `Post has been been successfully reported with '${response.status}' status!`,
+            });
 
             return res.status(201).json({
                 status: 'success',
@@ -153,7 +158,19 @@ class PostReportsController {
                 updatedAt,
             };
 
-            const updatedReport = await PostReportServices.updatePostReport(postReportId, updatedData);
+            const updatedReports = await PostReportServices.updatePostReport(postReportId, updatedData);
+
+            if (!updatedReports || updatedReports.length === 0) {
+                return next(createError(500, 'Failed to update post report status!'));
+            }
+
+            // const updatedReport = updatedReports[0];
+
+            const io = req.app.get('socketio');
+            io.to(existingPostReport.reportedBy.toString()).emit('post_status_updated', {
+                message: `Your report status has been updated to '${req.body.status}'!`,
+                // data: updatedReport,
+            });
 
             await NotificationServices.createNotification({
                 userId: existingPostReport.reportedBy,
@@ -164,7 +181,7 @@ class PostReportsController {
             return res.status(200).json({
                 status: 'success',
                 message: 'Status posts reports updated successfully!',
-                data: updatedReport,
+                data: updatedReports,
             });
 
         } catch (error) {

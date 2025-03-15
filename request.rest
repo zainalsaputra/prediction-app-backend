@@ -24,12 +24,12 @@ Content-Type: application/json
 
 {
     "postId" : "5507aad8-f10b-4f78-9d8e-f38eb8b75eaf",
-    "reportedBy" : "b077733d-e727-4cd5-8a6c-88f98f59d7b1",
-    "reason" : "Tidak Sah"
+    "reportedBy" : "b077733d-e727-4cd5-8a6c-88f98f59d7b2",
+    "reason" : "Tidak Relavan"
 }
 
 ###
-PATCH http://localhost:3000/post/reports/345f1c1d-0154-4e93-87d9-2968ea8c64b7/status
+PATCH http://localhost:3000/post/reports/6b4538a9-acde-4ea2-b05c-0d55c8ffe49a/status
 Content-Type: application/json
 
 {
