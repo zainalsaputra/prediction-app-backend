@@ -1,6 +1,7 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-require("dotenv").config();
+const express = require("express");
+require('dotenv').config();
 
 const swaggerOptions = {
     definition: {
@@ -44,7 +45,15 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 const setupSwagger = (app) => {
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css" }));
+
+    const swaggerDistPath = require("swagger-ui-dist").getAbsoluteFSPath();
+    app.use("/docs", express.static(swaggerDistPath));
+
+    swaggerUi.setup(swaggerDocs, {
+        customCss:'.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }', customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
+    })
 
     const serverUrls = swaggerOptions.definition.servers.map(server => server.url);
     serverUrls.forEach(url => console.log(`Swagger docs available at : ${url}/docs`));

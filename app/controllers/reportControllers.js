@@ -1,6 +1,8 @@
 const fs = require('fs');
+const url = require('url');
 const moment = require('moment');
 const createError = require('http-errors');
+const cloudinary = require('../config/cloudinary');
 
 const {
     createReportSchema,
@@ -16,6 +18,7 @@ const UsersServices = require('../services/usersServices');
 
 class ReportsController {
     static async createReport(req, res, next) {
+        let publicId = null;
         try {
             const { error } = createReportSchema.validate(req.body);
             if (error) {
@@ -32,11 +35,39 @@ class ReportsController {
                 return next(createError(404, 'User is not registered in our database!'));
             }
 
-            const imagePath = req.file ? req.file.path : null;
+            // const imagePath = req.file ? req.file.path : null;
+
+            // const reportData = {
+            //     ...req.body,
+            //     image: imagePath
+            // };
+
+            let imageUrl = null;
+
+            if (req.file) {
+                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
+                const result = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        {
+                            folder: 'reports',
+                            public_id: uniqueName,
+                            overwrite: true,
+                            resource_type: "auto",
+                        },
+                        (error, result) => {
+                            if (error) return reject(error);
+                            resolve(result);
+                        }
+                    ).end(req.file.buffer);
+                });
+
+                imageUrl = result.secure_url;
+                publicId = result.public_id;
+            }
 
             const reportData = {
                 ...req.body,
-                image: imagePath
+                image: imageUrl
             };
 
             const response = await ReportService.createReport(reportData);
@@ -48,11 +79,19 @@ class ReportsController {
             });
 
         } catch (error) {
-            if (req.file) {
-                fs.unlink(req.file.path, (err) => {
-                    if (err) console.error('Error deleting file:', err);
+            // if (req.file) {
+            //     fs.unlink(req.file.path, (err) => {
+            //         if (err) console.error('Error deleting file:', err);
+            //     });
+            // }
+
+            if (publicId) {
+                cloudinary.uploader.destroy(publicId, (err, result) => {
+                    if (err) console.error('Error deleting image from Cloudinary:', err);
+                    else console.log('Rolled back image from Cloudinary:', result);
                 });
             }
+
             next(error);
         }
     }
@@ -100,14 +139,14 @@ class ReportsController {
                 });
             }
 
-            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+            // const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
             const reportsWithImageUrls = reports.map(report => {
                 const reportData = report.toJSON();
                 return {
                     id: reportData.id,
                     userId: reportData.userId,
-                    image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                    // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
                     province: reportData.province,
@@ -117,6 +156,7 @@ class ReportsController {
                     address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
+                    image: reportData.image,
                     createdAt: reportData.createdAt,
                     updatedAt: reportData.updatedAt,
                 };
@@ -146,29 +186,31 @@ class ReportsController {
                 return next(createError(404, 'Report not found!'));
             }
 
-            const baseUrl = `${req.protocol}://${req.get('host')}/`;
-            const reportData = report.toJSON();
 
-            const formattedReport = {
-                id: reportData.id,
-                userId: reportData.userId,
-                image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
-                type_report: reportData.type_report,
-                description: reportData.description,
-                province: reportData.province,
-                district: reportData.district,
-                subdistrict: reportData.subdistrict,
-                village: reportData.village,
+            // const baseUrl = `${req.protocol}://${req.get('host')}/`;
+            // const reportData = report.toJSON();
+
+            const reportData = {
+                id: report.id,
+                userId: report.userId,
+                // image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null,
+                type_report: report.type_report,
+                description: report.description,
+                province: report.province,
+                district: report.district,
+                subdistrict: report.subdistrict,
+                village: report.village,
                 address_detail: reportData.address_detail,
-                longitude: reportData.longitude,
-                latitude: reportData.latitude,
-                createdAt: reportData.createdAt,
-                updatedAt: reportData.updatedAt,
+                longitude: report.longitude,
+                latitude: report.latitude,
+                image: report.image,
+                createdAt: report.createdAt,
+                updatedAt: report.updatedAt,
             };
 
             return res.status(200).json({
                 status: 'success',
-                data: formattedReport
+                data: reportData
             });
 
         } catch (error) {
@@ -190,14 +232,14 @@ class ReportsController {
                 return next(createError(404, 'No reports found for this user'));
             }
 
-            const baseUrl = `${req.protocol}://${req.get('host')}/`;
+            // const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
             const reportsWithImageUrls = response.reports.map(report => {
                 const reportData = report.toJSON();
                 return {
                     id: reportData.id,
                     userId: reportData.userId,
-                    image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
+                    // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
                     province: reportData.province,
@@ -207,6 +249,7 @@ class ReportsController {
                     address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
+                    image: reportData.image,
                     createdAt: reportData.createdAt,
                     updatedAt: reportData.updatedAt,
                 };
@@ -232,16 +275,12 @@ class ReportsController {
     }
 
     static async updateReport(req, res, next) {
+        let publicId = null;
         try {
             const reportId = req.params.id;
 
             const { error } = updateReportSchema.validate({ ...req.body, id: reportId });
             if (error) {
-                if (req.file) {
-                    fs.unlink(req.file.path, (err) => {
-                        if (err) console.error('Error deleting file:', err);
-                    });
-                }
                 return next(createError(400, error.details[0].message));
             }
 
@@ -250,36 +289,66 @@ class ReportsController {
                 return next(createError(404, 'Report not found!'));
             }
 
-            let imagePath = existingReport.image;
+            let imageUrl = existingReport.image;
+
             if (req.file) {
+
                 if (existingReport.image) {
-                    fs.unlink(existingReport.image, (err) => {
-                        if (err) console.error('Error deleting old image:', err);
-                    });
+                    try {
+                        const parsedUrl = url.parse(existingReport.image);
+                        const oldImagePath = decodeURIComponent(parsedUrl.pathname); 
+        
+                        const oldPublicId = oldImagePath.split('/').pop().split('.')[0];
+        
+                        if (oldPublicId) {
+                            const result = await cloudinary.uploader.destroy(`reports/${oldPublicId}`);
+                            console.log(`Deleted old image from Cloudinary: reports/${oldPublicId}`, result);
+                        }
+                    } catch (err) {
+                        console.error('Error deleting old image from Cloudinary:', err);
+                    }
                 }
-                imagePath = req.file.path;
+
+                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
+                const result = await new Promise((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        {
+                            folder: 'reports',
+                            public_id: uniqueName,
+                            overwrite: true,
+                            resource_type: "auto",
+                        },
+                        (error, result) => {
+                            if (error) return reject(error);
+                            resolve(result);
+                        }
+                    ).end(req.file.buffer);
+                });
+
+                imageUrl = result.secure_url;
+                publicId = result.public_id;
             }
 
             const updatedAt = moment().tz("Asia/Jakarta").format();
 
             const updatedData = {
                 ...req.body,
-                image: imagePath,
+                image: imageUrl,
                 updatedAt,
             };
 
-            const updatedReport = await ReportService.updateReport(reportId, updatedData);
+            await ReportService.updateReport(reportId, updatedData);
 
             return res.status(200).json({
                 status: 'success',
-                message: 'Report updated successfully!',
-                data: updatedReport,
+                message: 'Report updated successfully!'
             });
 
         } catch (error) {
-            if (req.file) {
-                fs.unlink(req.file.path, (err) => {
-                    if (err) console.error('Error deleting file:', err);
+            if (publicId) {
+                cloudinary.uploader.destroy(publicId, (err, result) => {
+                    if (err) console.error('Error deleting image from Cloudinary:', err);
+                    else console.log('Rolled back image from Cloudinary:', result);
                 });
             }
             next(error);
@@ -305,12 +374,11 @@ class ReportsController {
                 updatedAt: new Date(),
             };
 
-            const updatedReport = await ReportService.updateReport(reportId, updatedData);
+            await ReportService.updateReport(reportId, updatedData);
 
             return res.status(200).json({
                 status: 'success',
                 message: 'Report type updated successfully!',
-                data: updatedReport,
             });
 
         } catch (error) {
@@ -321,30 +389,40 @@ class ReportsController {
     static async deleteReport(req, res, next) {
         try {
             const reportId = req.params.id;
-
+    
             const { error } = deleteReportSchema.validate({ id: reportId });
             if (error) {
                 return next(createError(400, error.details[0].message));
             }
-
+    
             const existingReport = await ReportService.getReportById(reportId);
             if (!existingReport) {
                 return next(createError(404, 'Report not found!'));
             }
 
             if (existingReport.image) {
-                fs.unlink(existingReport.image, (err) => {
-                    if (err) console.error('Error deleting image:', err);
-                });
+                try {
+                    const parsedUrl = url.parse(existingReport.image);
+                    const oldImagePath = decodeURIComponent(parsedUrl.pathname); 
+    
+                    const oldPublicId = oldImagePath.split('/').pop().split('.')[0];
+    
+                    if (oldPublicId) {
+                        const result = await cloudinary.uploader.destroy(`reports/${oldPublicId}`);
+                        console.log(`Deleted old image from Cloudinary: reports/${oldPublicId}`, result);
+                    }
+                } catch (err) {
+                    console.error('Error deleting old image from Cloudinary:', err);
+                }
             }
-
+    
             await ReportService.deleteReport(reportId);
-
+    
             return res.status(200).json({
                 status: 'success',
                 message: `Report deleted successfully!`,
             });
-
+    
         } catch (error) {
             next(error);
         }

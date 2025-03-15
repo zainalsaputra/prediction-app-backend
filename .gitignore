@@ -4,3 +4,4 @@ uploads
 !.gitkeep
 draft
 socket-client.js
+.vercel
