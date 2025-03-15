@@ -21,31 +21,22 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const routes = require('./routes/index');
-
-app.use(routes);
-
 const errorHandler = require('./middleware/errorHandler');
 
+app.use(routes);
 app.use(errorHandler);
 setupSwagger(app);
 
+const PORT = process.env.PORT || 3000;
 
-// const PORT = process.env.PORT || 3000;
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on PORT : ${PORT}`);
-//   console.log("Swagger docs available at http://localhost:3000/docs");
-// });
-
-
-app.listen(3000, () => console.log("Server ready on port 3000."));
+server.listen(PORT, () => {
+  console.log(`Server is running on PORT : ${PORT}`);
+});
 
 const db = require('./models');
 
@@ -56,22 +47,15 @@ db.sequelize.authenticate()
 io.on('connection', (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
-  // socket.on('join_room', (userId) => {
-  //     socket.join(userId);
-  //     console.log(`User ${socket.id} joined room: ${userId}`);
-  // });
-
   socket.on('join_room', (userId) => {
     if (!userId) return;
     socket.join(userId);
     console.log(`User ${socket.id} joined room: ${userId}`);
   });
 
-
   socket.on('disconnect', () => {
     console.log(`User Disconnected: ${socket.id}`);
   });
-  
 });
 
 app.set('socketio', io);
