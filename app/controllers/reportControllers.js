@@ -204,7 +204,7 @@ class ReportsController {
                 district: report.district,
                 subdistrict: report.subdistrict,
                 village: report.village,
-                address_detail: reportData.address_detail,
+                address_detail: report.address_detail,
                 longitude: report.longitude,
                 latitude: report.latitude,
                 image: report.image,

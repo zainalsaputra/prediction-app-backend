@@ -29,7 +29,7 @@
 
 - Cloudinary 
 
-- Swagger  (bug interfaces on vercel)
+- Swagger (bug interfaces on vercel)
 
 - Multer
 
