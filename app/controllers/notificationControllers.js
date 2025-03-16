@@ -23,7 +23,6 @@ class NotificationControllers {
                 return next(createError(404, 'User is not registered in our database!'));
             }
 
-
             const notifications = await NotificationService.getNotificationsByUser(userId);
 
             // const parsing = notifications.map(res => {
@@ -43,6 +42,10 @@ class NotificationControllers {
             // }))
 
             // console.log(parsing);
+
+            if (notifications == 0) {
+                return next(createError(400, `User with id '${userId}' dont have notification`));
+            }
 
             return res.status(200).json({
                 status: 'success',
