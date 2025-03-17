@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const Reports = require('../models/reports');
 const Users = require('../models/users');
 const moment = require('moment-timezone');
+const { Sequelize } = require('../models');
 
 class ReportsService {
 
@@ -106,6 +107,30 @@ class ReportsService {
     const post = await Reports.findOne({ where: { id: postId } });
     return post !== null;
   }
+
+  static async getReportStatistics({ province, district, subdistrict, village }) {
+    let filterConditions = {};
+
+    if (province) filterConditions.province = province;
+    if (district) filterConditions.district = district;
+    if (subdistrict) filterConditions.subdistrict = subdistrict;
+    if (village) filterConditions.village = village;
+
+    const reports = await Reports.findAll({
+      where: filterConditions,
+      attributes: [
+        'type_report',
+        [Sequelize.fn('COUNT', Sequelize.col('type_report')), 'count']
+      ],
+      group: ['type_report']
+    });
+
+    return reports.map(r => ({
+      category: r.type_report,
+      count: r.getDataValue('count')
+    }));
+  }
+
 }
 
 module.exports = ReportsService;
