@@ -7,7 +7,7 @@ const createReportSchema = Joi.object({
         'string.guid': 'User ID must be a valid UUID',
         'any.required': 'User ID is required',
     }),
-    type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').required().messages({
+    type_report: Joi.string().valid('Jalan Rusak', 'Jembatan Rusak', 'Sampah Berserakan', 'Bangunan Rusak', 'Bangunan Roboh').required().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
         'any.only': 'Invalid report type',
@@ -76,7 +76,7 @@ const updateReportSchema = Joi.object({
         'string.guid': 'User ID must be a valid UUID',
         'any.required': 'User ID is required',
     }),
-    type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').optional().messages({
+    type_report: Joi.string().valid('Jalan Rusak', 'Jembatan Rusak', 'Sampah Berserakan', 'Bangunan Rusak', 'Bangunan Roboh').optional().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
         'any.only': 'Invalid report type',
@@ -126,7 +126,7 @@ const updateTypeReportSchema = Joi.object({
         'string.guid': 'ID must be a valid UUID',
         'any.required': 'ID is required',
     }),
-    type_report: Joi.string().valid('Jalan Rusak', 'Bencana', 'Rumah Retak').required().messages({
+    type_report: Joi.string().valid('Jalan Rusak', 'Jembatan Rusak', 'Sampah Berserakan', 'Bangunan Rusak', 'Bangunan Roboh').required().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
         'any.only': 'Invalid report type',
