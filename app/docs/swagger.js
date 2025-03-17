@@ -24,16 +24,9 @@ const swaggerOptions = {
           },          
         servers: [
             {
-                url: `http://localhost:${ process.env.PORT }`,
-                description: "Development server",
-            },
-            {
-                url: `${process.env.PRE_PRODUCTION_SERVER}`,
-                description: "Pre-Production server",
-            },
-            {
-                url: "https://0.0.0.0:0000",
-                description: "Production server",
+
+                url: process.env.BASE_URL || "https://sec-prediction-app-backend.vercel.app",
+              
             },
         ],
     },
