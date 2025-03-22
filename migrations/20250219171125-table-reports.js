@@ -9,6 +9,16 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       image: {
         allowNull: true,
         type: Sequelize.STRING,
@@ -21,17 +31,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      region : {
+      region: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      longitude : {
+      longitude: {
         allowNull: false,
-        type: Sequelize.DECIMAL(11,8),
+        type: Sequelize.DECIMAL(11, 8),
       },
-      latitude : {
+      latitude: {
         allowNull: false,
-        type: Sequelize.DECIMAL(10,8),
+        type: Sequelize.DECIMAL(10, 8),
       },
       createdAt: {
         allowNull: false,

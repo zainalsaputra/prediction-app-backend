@@ -3,6 +3,7 @@ const PostReports = require('../models/postReports');
 const db = require('../models');
 const { Users, Reports } = db;
 const moment = require('moment-timezone');
+const Locations = require('../models/locations');
 
 class postReportsService {
 
@@ -22,7 +23,7 @@ class postReportsService {
     }
     if (status) {
       filterConditions.status = status;
-      
+
     }
     if (reportedByUserId) {
       filterConditions.reportedByUserId = reportedByUserId;
@@ -68,6 +69,10 @@ class postReportsService {
         {
           model: Reports,
           as: 'post',
+          include: [{
+            model: Locations,
+            as: 'location',
+          }]
         }
       ]
     });

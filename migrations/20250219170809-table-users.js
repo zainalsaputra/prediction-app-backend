@@ -10,6 +10,16 @@ module.exports = {
         type: Sequelize.UUID,
         // defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
+      roleId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING,
