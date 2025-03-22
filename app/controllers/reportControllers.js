@@ -49,7 +49,7 @@ class ReportsController {
             let imageUrl = null;
 
             if (req.file) {
-                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
+                const uniqueName = `report-${req.body.userId}-${req.body.type_report}-${req.body.province}`.toLowerCase();
                 const result = await new Promise((resolve, reject) => {
                     cloudinary.uploader.upload_stream(
                         {
@@ -153,10 +153,10 @@ class ReportsController {
                     // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
                     type_report: reportData.type_report,
                     description: reportData.description,
-                    province: reportData.province,
-                    district: reportData.district,
-                    subdistrict: reportData.subdistrict,
-                    village: reportData.village,
+                    province: reportData.location.province,
+                    district: reportData.location.district,
+                    subdistrict: reportData.location.subdistrict,
+                    village: reportData.location.village,
                     address_detail: reportData.address_detail,
                     longitude: reportData.longitude,
                     latitude: reportData.latitude,
@@ -185,36 +185,35 @@ class ReportsController {
                 return next(createError(400, error.details[0].message));
             }
 
-            const report = await ReportService.getReportById(reportId);
-            if (!report) {
+            const reportById = await ReportService.getReportById(reportId);
+            if (!reportById) {
                 return next(createError(404, 'Report not found!'));
             }
-
 
             // const baseUrl = `${req.protocol}://${req.get('host')}/`;
             // const reportData = report.toJSON();
 
-            const reportData = {
-                id: report.id,
-                userId: report.userId,
-                // image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null,
-                type_report: report.type_report,
-                description: report.description,
-                province: report.province,
-                district: report.district,
-                subdistrict: report.subdistrict,
-                village: report.village,
-                address_detail: report.address_detail,
-                longitude: report.longitude,
-                latitude: report.latitude,
-                image: report.image,
-                createdAt: report.createdAt,
-                updatedAt: report.updatedAt,
-            };
+            // const reportData = {
+            //     id: report.id,
+            //     userId: report.userId,
+            //     // image: report.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null,
+            //     type_report: report.type_report,
+            //     description: report.description,
+            //     province: report.location.province,
+            //     district: report.location.district,
+            //     subdistrict: report.location.subdistrict,
+            //     village: report.location.village,
+            //     address_detail: report.address_detail,
+            //     longitude: report.longitude,
+            //     latitude: report.latitude,
+            //     image: report.image,
+            //     createdAt: report.createdAt,
+            //     updatedAt: report.updatedAt,
+            // };
 
             return res.status(200).json({
                 status: 'success',
-                data: reportData
+                data: reportById
             });
 
         } catch (error) {
@@ -238,39 +237,30 @@ class ReportsController {
 
             // const baseUrl = `${req.protocol}://${req.get('host')}/`;
 
-            const reportsWithImageUrls = response.reports.map(report => {
-                const reportData = report.toJSON();
-                return {
-                    id: reportData.id,
-                    userId: reportData.userId,
-                    // image: reportData.image ? `${baseUrl}${reportData.image.replace(/\\/g, '/')}` : null,
-                    type_report: reportData.type_report,
-                    description: reportData.description,
-                    province: reportData.province,
-                    district: reportData.district,
-                    subdistrict: reportData.subdistrict,
-                    village: reportData.village,
-                    address_detail: reportData.address_detail,
-                    longitude: reportData.longitude,
-                    latitude: reportData.latitude,
-                    image: reportData.image,
-                    createdAt: reportData.createdAt,
-                    updatedAt: reportData.updatedAt,
-                };
-            });
+            // const reportsWithImageUrls = response.reports.map(report => {
+            //     const reportData = report.toJSON();
+            //     return {
+            //         id: reportData.id,
+            //         userId: reportData.userId,
+            //         // image: reportData.image ? `${baseUrl}${report.image.replace(/\\/g, '/')}` : null,
+            //         type_report: reportData.type_report,
+            //         description: reportData.description,
+            //         province: reportData.location.province,
+            //         district: reportData.location.district,
+            //         subdistrict: reportData.location.subdistrict,
+            //         village: reportData.location.village,
+            //         address_detail: reportData.address_detail,
+            //         longitude: reportData.longitude,
+            //         latitude: reportData.latitude,
+            //         image: reportData.image,
+            //         createdAt: reportData.createdAt,
+            //         updatedAt: reportData.updatedAt,
+            //     };
+            // });
 
             return res.status(200).json({
                 status: 'success',
-                data: {
-                    user: {
-                        id: response.id,
-                        name: response.name,
-                        email: response.email,
-                        createdAt: response.createdAt,
-                        updatedAt: response.updatedAt
-                    },
-                    reports: reportsWithImageUrls
-                }
+                data: response
             });
 
         } catch (error) {
@@ -313,7 +303,7 @@ class ReportsController {
                     }
                 }
 
-                const uniqueName = `report_${req.body.userId}_${req.body.type_report}_${req.body.region}`.toLowerCase();
+                const uniqueName = `report-${req.body.userId}-${req.body.type_report}-${req.body.province}`.toLowerCase();
                 const result = await new Promise((resolve, reject) => {
                     cloudinary.uploader.upload_stream(
                         {

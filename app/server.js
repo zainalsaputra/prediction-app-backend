@@ -48,24 +48,24 @@ db.sequelize.authenticate()
   .then(() => console.log('✅ Database connected successfully!'))
   .catch((err) => console.error('❌ Error connecting to database:', err));
 
-io.on('connection', (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+// io.on('connection', (socket) => {
+//   console.log(`User Connected: ${socket.id}`);
 
-  socket.on('join_room', (userId) => {
-    if (!userId) return;
-    socket.join(userId);
-    console.log(`User ${socket.id} joined room: ${userId}`);
-  });
+//   socket.on('join_room', (userId) => {
+//     if (!userId) return;
+//     socket.join(userId);
+//     console.log(`User ${socket.id} joined room: ${userId}`);
+//   });
 
-  socket.on('disconnect', () => {
-    console.log(`User Disconnected: ${socket.id}`);
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log(`User Disconnected: ${socket.id}`);
+//   });
+// });
 
-app.set('socketio', io);
+// app.set('socketio', io);
 
-setInterval(() => {
-  console.log('Connected users:', io.sockets.adapter.rooms);
-}, 10000);
+// setInterval(() => {
+//   console.log('Connected users:', io.sockets.adapter.rooms);
+// }, 10000);
 
 module.exports = app;
