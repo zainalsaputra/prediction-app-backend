@@ -62,22 +62,52 @@
 
 // module.exports = new AuthenticationsMiddleware();
 
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
-const verifyToken = (req, res, next) => {
+// const verifyToken = (req, res, next) => {
    
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) {
-    return res.sendStatus(401);
-  }
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
-    if (error) {
-      return res.sendStatus(403);
+//   const authHeader = req.headers['authorization'];
+//   const token = authHeader && authHeader.split(' ')[1];
+//   if (token == null) {
+//     return res.sendStatus(401);
+//   }
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+//     if (error) {
+//       return res.sendStatus(403);
+//     }
+//     req.email = decoded.email;
+//     next();
+//   });
+// };
+
+// module.exports = { verifyToken };
+
+const jwt = require('jsonwebtoken');
+const createError = require('http-errors');
+
+module.exports = {
+    authenticateUser: (req, res, next) => {
+        const token = req.header('Authorization');
+        if (!token) {
+            return next(createError(401, 'Access Denied. No token provided.'));
+        }
+
+        try {
+            const verified = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+            req.user = verified;
+            next();
+        } catch (error) {
+            return next(createError(403, 'Invalid Token!'));
+        }
+    },
+
+    authorizeRoles: (...roles) => {
+        return (req, res, next) => {
+            if (!roles.includes(req.user.role)) {
+                return next(createError(403, 'Forbidden: You do not have permission.'));
+            }
+            next();
+        };
     }
-    req.email = decoded.email;
-    next();
-  });
 };
 
-module.exports = { verifyToken };

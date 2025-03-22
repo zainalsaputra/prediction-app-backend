@@ -2,8 +2,9 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 class Locations extends Model {
   static associate(models) {
-    this.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
+    // this.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
     this.hasMany(models.Reports, { foreignKey: 'locationId', as: 'reports' });
+    this.hasOne(models.Users, { foreignKey: 'locationId', as: 'user' });
   }
 
   static initModel(sequelize) {
@@ -15,16 +16,16 @@ class Locations extends Model {
           type: DataTypes.UUID,
           defaultValue: Sequelize.literal('uuid_generate_v4()'),
         },
-        userId: {
-          allowNull: false,
-          type: DataTypes.UUID,
-          references: {
-            model: 'Users',
-            key: 'id',
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE',
-        },
+        // userId: {
+        //   allowNull: false,
+        //   type: DataTypes.UUID,
+        //   references: {
+        //     model: 'Users',
+        //     key: 'id',
+        //   },
+        //   onUpdate: 'CASCADE',
+        //   onDelete: 'CASCADE',
+        // },
         province: {
           allowNull: false,
           type: DataTypes.STRING,

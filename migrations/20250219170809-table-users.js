@@ -11,7 +11,7 @@ module.exports = {
         // defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       roleId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'roles',

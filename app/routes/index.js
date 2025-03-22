@@ -7,6 +7,7 @@ const reportRoutes = require('./reportRoutes');
 const postReportRoutes = require('./postReportRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const statisticRoutes = require('./statisticRoutes');
+const authenticationRoutes = require('./authenticationRoutes');
 
 router.get('/', (req, res) => {
   res.send({
@@ -15,6 +16,7 @@ router.get('/', (req, res) => {
   });
 });
 
+router.use('/auth', authenticationRoutes);
 router.use('/predict', predictRoutes);
 router.use('/reports', reportRoutes);
 router.use('/post/reports', postReportRoutes);
