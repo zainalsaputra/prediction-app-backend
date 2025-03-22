@@ -76,7 +76,7 @@ const updateReportSchema = Joi.object({
         'string.guid': 'User ID must be a valid UUID',
         'any.required': 'User ID is required',
     }),
-    type_report: Joi.string().valid('Jalan Rusak', 'Jembatan Rusak', 'Sampah Berserakan', 'Bangunan Rusak', 'Bangunan Roboh').optional().messages({
+    type_report: Joi.string().optional().valid('Jalan Rusak', 'Jembatan Rusak', 'Sampah Berserakan', 'Bangunan Rusak', 'Bangunan Roboh').optional().messages({
         'string.base': 'Type report must be a string',
         'string.empty': 'Type report cannot be empty',
         'any.only': 'Invalid report type',
@@ -85,22 +85,22 @@ const updateReportSchema = Joi.object({
         'string.base': 'Description must be a string',
         'string.empty': 'Description cannot be empty',
     }),
-    province: Joi.string().required().messages({
+    province: Joi.string().optional().messages({
         'string.base': 'Province must be a string',
         'string.empty': 'Province cannot be empty',
         'any.required': 'Province is required',
     }),
-    district: Joi.string().required().messages({
+    district: Joi.string().optional().messages({
         'string.base': 'District must be a string',
         'string.empty': 'District cannot be empty',
         'any.required': 'District is required',
     }),
-    subdistrict: Joi.string().required().messages({
+    subdistrict: Joi.string().optional().messages({
         'string.base': 'Subdistrict must be a string',
         'string.empty': 'Subdistrict cannot be empty',
         'any.required': 'Subdistrict is required',
     }),
-    village: Joi.string().required().messages({
+    village: Joi.string().optional().messages({
         'string.base': 'Village must be a string',
         'string.empty': 'Village cannot be empty',
         'any.required': 'Village is required',

@@ -1,20 +1,19 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
-const moment = require('moment');
 
-class Reports extends Model {
+class Locations extends Model {
   static associate(models) {
     this.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
-    this.belongsTo(models.Locations, { foreignKey: 'locationId', as: 'location' });
+    this.hasMany(models.Reports, { foreignKey: 'locationId', as: 'reports' });
   }
 
   static initModel(sequelize) {
-    Reports.init(
+    Locations.init(
       {
         id: {
           allowNull: false,
           primaryKey: true,
           type: DataTypes.UUID,
-          defaultValue: DataTypes.UUIDV4,
+          defaultValue: Sequelize.literal('uuid_generate_v4()'),
         },
         userId: {
           allowNull: false,
@@ -26,65 +25,41 @@ class Reports extends Model {
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
         },
-        locationId: {
-          allowNull: true,
-          type: DataTypes.UUID,
-          references: {
-            model: 'Locations',
-            key: 'id',
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
-        },
-        image: {
-          allowNull: true,
-          type: DataTypes.STRING,
-        },
-        type_report: {
+        province: {
           allowNull: false,
           type: DataTypes.STRING,
         },
-        description: {
+        district: {
           allowNull: false,
-          type: DataTypes.TEXT,
-        },
-        address_detail: {
-          allowNull: true,
           type: DataTypes.STRING,
         },
-        longitude: {
+        subdistrict: {
           allowNull: false,
-          type: DataTypes.DECIMAL(11, 8),
+          type: DataTypes.STRING,
         },
-        latitude: {
+        village: {
           allowNull: false,
-          type: DataTypes.DECIMAL(10, 8),
+          type: DataTypes.STRING,
         },
         createdAt: {
           allowNull: false,
           type: DataTypes.DATE,
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'"),
-          get() {
-            return moment.utc(this.getDataValue("createdAt")).tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
-          },
         },
         updatedAt: {
           allowNull: false,
           type: DataTypes.DATE,
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'"),
-          get() {
-            return moment.utc(this.getDataValue("updatedAt")).tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm:ss");
-          },
         },
       },
       {
         sequelize,
-        modelName: 'Reports',
-        tableName: 'reports',
+        modelName: 'Locations',
+        tableName: 'locations',
         timestamps: true,
       }
     );
   }
 }
 
-module.exports = Reports;
+module.exports = Locations;

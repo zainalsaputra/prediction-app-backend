@@ -3,12 +3,13 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('users', 'roleId', {
-      type: Sequelize.INTEGER,
-      allowNull: false,
+    await queryInterface.addConstraint('reports', {
+      fields: ['userId'],
+      type: 'foreign key',
+      name: 'fk_reports_users',
       references: {
-        model: 'roles',
-        key: 'id',
+        table: 'users',
+        field: 'id',
       },
       onUpdate: 'CASCADE',
       onDelete: 'RESTRICT',
@@ -16,6 +17,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('users', 'roleId');
+    await queryInterface.removeConstraint('reports', 'fk_reports_users');
   },
 };
