@@ -2,7 +2,7 @@ const express = require('express');
 const reportControllers = require('../controllers/reportControllers');
 const router = express.Router();
 const imageUploader = require('../middleware/imageUploader');
-// const roleMiddleware = require('../middleware/roleMiddleware')
+const roleMiddleware = require('../middleware/roleMiddleware')
 
 /**
  * @swagger
@@ -70,7 +70,7 @@ router.post('/', (req, res, next) => {
         }
         next();
     });
-}, reportControllers.createReport);
+}, roleMiddleware(['user','admin']), reportControllers.createReport);
 
 /**
  * @swagger
@@ -188,7 +188,7 @@ router.post('/', (req, res, next) => {
  *       500:
  *         description: Internal server error
  */
-router.get('/', reportControllers.getAllWithFilteredReports);
+router.get('/', roleMiddleware(['user','admin']), reportControllers.getAllWithFilteredReports);
 
 
 /**
@@ -212,7 +212,7 @@ router.get('/', reportControllers.getAllWithFilteredReports);
  *       500:
  *         description: Internal server error
  */
-router.get('/user/:userId', reportControllers.getReportsByUserId);
+router.get('/user/:userId', roleMiddleware(['user','admin']), reportControllers.getReportsByUserId);
 
 /**
  * @swagger
@@ -281,7 +281,7 @@ router.put('/:id', (req, res, next) => {
         }
         next();
     });
-}, reportControllers.updateReport);
+}, roleMiddleware(['user','admin']), reportControllers.updateReport);
 
 /**
  * @swagger
@@ -314,7 +314,7 @@ router.put('/:id', (req, res, next) => {
  *       500:
  *         description: Internal server error
  */
-router.patch('/:id/type-report', reportControllers.updateTypeReport);
+router.patch('/:id/type-report', roleMiddleware(['admin']), reportControllers.updateTypeReport);
 
 /**
  * @swagger
@@ -337,7 +337,7 @@ router.patch('/:id/type-report', reportControllers.updateTypeReport);
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id', reportControllers.deleteReport);
+router.delete('/:id', roleMiddleware(['admin']), reportControllers.deleteReport);
 
 
 /**
@@ -361,6 +361,6 @@ router.delete('/:id', reportControllers.deleteReport);
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', reportControllers.getReportById);
+router.get('/:id', roleMiddleware(['user','admin']),  reportControllers.getReportById);
 
 module.exports = router;

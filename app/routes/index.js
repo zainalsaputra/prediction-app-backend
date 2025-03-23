@@ -24,13 +24,13 @@ router.use('/auth', authRoutes);
 
 router.use('/predict', authMiddleware, roleMiddleware(['admin']), predictRoutes);
 
-router.use('/reports', authMiddleware, roleMiddleware(['admin', 'user']), reportRoutes);
+router.use('/reports', authMiddleware, reportRoutes);
 
-router.use('/post/reports', authMiddleware, roleMiddleware(['admin', 'user']), postReportRoutes);
+router.use('/post/reports', authMiddleware, postReportRoutes);
 
-router.use('/notifications', authMiddleware, roleMiddleware(['admin', 'user']), notificationRoutes);
+router.use('/notifications', authMiddleware, roleMiddleware(['user', 'admin']), notificationRoutes);
 
-router.use('/statistics', authMiddleware, roleMiddleware(['admin', 'user']), statisticRoutes);
+router.use('/statistics', authMiddleware, roleMiddleware(['user', 'admin']), statisticRoutes);
 
 router.use('/users', authMiddleware, roleMiddleware(['admin']), usersRoutes);
 

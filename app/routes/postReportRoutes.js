@@ -1,6 +1,7 @@
 const express = require('express');
 const PostReportsController = require('../controllers/postReportControllers');
 const router = express.Router();
+const roleMiddleware = require('../middleware/roleMiddleware');
 
 /**
  * @swagger
@@ -38,7 +39,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/', PostReportsController.createPostReport);
+router.post('/', roleMiddleware(['user','admin']), PostReportsController.createPostReport);
 
 /**
  * @swagger
@@ -81,7 +82,7 @@ router.post('/', PostReportsController.createPostReport);
  *       500:
  *         description: Internal server error
  */
-router.get('/', PostReportsController.getAllWithFilteredPostReports);
+router.get('/', roleMiddleware(['user','admin']), PostReportsController.getAllWithFilteredPostReports);
 
 /**
  * @swagger
@@ -107,7 +108,7 @@ router.get('/', PostReportsController.getAllWithFilteredPostReports);
  *       500:
  *         description: Internal server error
  */
-router.get('/:id/status', PostReportsController.getStatusPostReport);
+router.get('/:id/status', roleMiddleware(['user','admin']), PostReportsController.getStatusPostReport);
 
 /**
  * @swagger
@@ -146,7 +147,7 @@ router.get('/:id/status', PostReportsController.getStatusPostReport);
  *       500:
  *         description: Internal server error
  */
-router.patch('/:id/status', PostReportsController.updateStatusPostReport);
+router.patch('/:id/status', roleMiddleware(['admin']), PostReportsController.updateStatusPostReport);
 
 /**
  * @swagger
@@ -172,6 +173,6 @@ router.patch('/:id/status', PostReportsController.updateStatusPostReport);
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id', PostReportsController.deletePostReport);
+router.delete('/:id', roleMiddleware(['admin']), PostReportsController.deletePostReport);
 
 module.exports = router;
