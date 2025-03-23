@@ -15,6 +15,8 @@ const io = socketIo(server, {
   }
 });
 
+app.set("trust proxy", 1);
+
 const helmet = require("helmet");
 app.use(helmet());
 
