@@ -248,17 +248,50 @@ class AuthenticationController {
                 return next(createError(400, 'Email and password are required'));
             }
 
-            const { token, user } = await AuthenticationServices.login(email, password);
+            const response = await AuthenticationServices.login(email, password);
             return res.status(200).json({
                 status: 'success',
                 message: 'Login successful!',
-                token,
-                user
+                response
             });
         } catch (error) {
             next(error);
         }
     }
+
+    static async refreshToken(req, res, next) {
+        try {
+            const { refreshToken } = req.body;
+            if (!refreshToken) return next(createError(401, 'Refresh Token required'));
+
+            const user = await AuthenticationServices.refreshToken(refreshToken);
+            if (!user) return next(createError(403, 'Invalid Refresh Token'));
+
+            jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
+                if (err) return next(createError(403, 'Invalid Refresh Token'));
+
+                const newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                res.json({ accessToken: newAccessToken });
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async getAllUsers(req, res, next) {
+        try {
+            const usersData = await AuthenticationServices.getAllUsers();
+
+            res.status(200).json({
+                status: 'success',
+                data: usersData,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 module.exports = AuthenticationController;

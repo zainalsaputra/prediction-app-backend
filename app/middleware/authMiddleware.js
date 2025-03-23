@@ -82,32 +82,56 @@
 
 // module.exports = { verifyToken };
 
+// const jwt = require('jsonwebtoken');
+// const createError = require('http-errors');
+
+// module.exports = {
+//     authenticateUser: (req, res, next) => {
+//         const token = req.header('Authorization');
+//         if (!token) {
+//             return next(createError(401, 'Access Denied. No token provided.'));
+//         }
+
+//         try {
+//             const verified = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+//             req.user = verified;
+//             next();
+//         } catch (error) {
+//             return next(createError(403, 'Invalid Token!'));
+//         }
+//     },
+
+//     authorizeRoles: (...roles) => {
+//         return (req, res, next) => {
+//             if (!roles.includes(req.user.role)) {
+//                 return next(createError(403, 'Forbidden: You do not have permission.'));
+//             }
+//             next();
+//         };
+//     }
+// };
+
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 
-module.exports = {
-    authenticateUser: (req, res, next) => {
-        const token = req.header('Authorization');
-        if (!token) {
-            return next(createError(401, 'Access Denied. No token provided.'));
-        }
+module.exports = (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
-        try {
-            const verified = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
-            req.user = verified;
-            next();
-        } catch (error) {
-            return next(createError(403, 'Invalid Token!'));
-        }
-    },
+    if (!authHeader) {
+        return next(createError(401, "Unauthorized: No token provided"));
+    }
 
-    authorizeRoles: (...roles) => {
-        return (req, res, next) => {
-            if (!roles.includes(req.user.role)) {
-                return next(createError(403, 'Forbidden: You do not have permission.'));
-            }
-            next();
-        };
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+        return next(createError(401, "Unauthorized: Invalid token format"));
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return next(createError(403, "Unauthorized: Invalid or expired token"));
     }
 };
-

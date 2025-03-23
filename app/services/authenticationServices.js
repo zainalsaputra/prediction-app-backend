@@ -11,7 +11,7 @@ class AuthenticationServices {
             admin: 'af5f62b1-1d76-4534-bb81-6ce4fd82e9c1',
             user: 'bf5f62b1-1d76-4534-bb81-6ce4fd82e9c2'
         };
-    
+
         const finalRoleId = roleMap[roleId] || roleMap['user'];
 
         const userExists = await Users.findOne({ where: { email } });
@@ -36,8 +36,9 @@ class AuthenticationServices {
         const user = await Users.findOne({
             where: { email },
             include: [
-                { model: Locations, as: 'location' }, 
-                { model: Roles, as: 'role' }]
+                { model: Locations, as: 'location' },
+                { model: Roles, as: 'role' }
+            ]
         });
 
         if (!user) throw createError(401, 'Invalid email or password');
@@ -45,13 +46,34 @@ class AuthenticationServices {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) throw createError(401, 'Invalid email or password');
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             { id: user.id, role: user.role.name },
             process.env.JWT_SECRET,
-            { expiresIn: '1d' }
+            { expiresIn: '1h' }
         );
 
-        return { token, user };
+        const refreshToken = jwt.sign(
+            { id: user.id },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        return { accessToken, refreshToken, user };
+    }
+
+    static async refreshToken(refreshToken) {
+        return await Users.findOne({ where: { refreshToken } });
+    }
+
+    static async getAllUsers(){
+        return await Users.findAll({
+            include: [
+                {model: Locations, as: 'location'},
+            ]
+        });
     }
 }
 

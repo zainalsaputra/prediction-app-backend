@@ -63,4 +63,8 @@ router.post('/register', AuthenticationController.register);
  */
 router.post('/login', AuthenticationController.login);
 
+router.post('/refresh', AuthenticationController.refreshToken);
+
+router.get('/users', AuthenticationController.getAllUsers);
+
 module.exports = router;
