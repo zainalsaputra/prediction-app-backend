@@ -4,6 +4,8 @@ class Users extends Model {
   static associate(models) {
     this.belongsTo(models.Roles, { foreignKey: 'roleId', as: 'role' });
     this.hasMany(models.Reports, { foreignKey: 'userId', as: 'reports' });
+    this.belongsTo(models.Locations, { foreignKey: 'locationId', as: 'location' });
+
   }
 
   static initModel(sequelize) {
@@ -13,6 +15,16 @@ class Users extends Model {
           primaryKey: true,
           type: DataTypes.UUID,
           defaultValue: Sequelize.literal('uuid_generate_v4()'),
+        },
+        locationId: {
+          allowNull: false,
+          type: DataTypes.UUID,
+          references: {
+            model: 'Locations',
+            key: 'id'
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         name: {
           allowNull: false,

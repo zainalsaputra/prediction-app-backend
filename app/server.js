@@ -15,6 +15,9 @@ const io = socketIo(server, {
   }
 });
 
+const helmet = require("helmet");
+app.use(helmet());
+
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -31,9 +34,12 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const routes = require('./routes/index');
 const errorHandler = require('./middleware/errorHandler');
+const { requestLimiter } = require('./middleware/rateLimit');
 
 app.use(routes);
+app.use(requestLimiter);
 app.use(errorHandler);
+
 setupSwagger(app);
 
 const PORT = process.env.PORT || 3000;

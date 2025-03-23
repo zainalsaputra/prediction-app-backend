@@ -16,16 +16,16 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      userId: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: 'users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
+      // userId: {
+      //   allowNull: false,
+      //   type: Sequelize.UUID,
+      //   references: {
+      //     model: 'users',
+      //     key: 'id'
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE'
+      // },
       province: {
         allowNull: false,
         type: Sequelize.STRING,
