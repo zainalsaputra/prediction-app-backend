@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const { Roles, Users, Locations } = require('../models');
 const createError = require('http-errors');
 
+require('dotenv').config();
+
 class AuthServices {
     static async register(userData) {
         const { name, email, password, roleId, province, district, subdistrict, village } = userData;
