@@ -12,10 +12,12 @@ module.exports = {
     */
 
     await queryInterface.bulkInsert('roles', [{
+      id: 'af5f62b1-1d76-4534-bb81-6ce4fd82e9c1',
       name: 'admin',
     }]);
 
     await queryInterface.bulkInsert('roles', [{
+      id: 'bf5f62b1-1d76-4534-bb81-6ce4fd82e9c2',
       name: 'user',
     }]);
   },

@@ -20,22 +20,20 @@ module.exports = {
       {
         // id: Sequelize.literal('uuid_generate_v4()'),
         id: 'b077733d-e727-4cd5-8a6c-88f98f59d7b1',
-        name: 'Admin User',
+        name: 'Admin',
         email: 'admin@example.com',
-        password: password,
-        roleId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        password: 'password',
+        roleId: 'af5f62b1-1d76-4534-bb81-6ce4fd82e9c1',
+        locationId: '2dc6e816-5599-4bd0-a690-74a5b5d05eea',
       },
       {
         // id: Sequelize.literal('uuid_generate_v4()'),
         id: 'b077733d-e727-4cd5-8a6c-88f98f59d7b2',
         name: 'Regular User',
         email: 'user@example.com',
-        password: password,
-        roleId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        password: 'password',
+        roleId: 'bf5f62b1-1d76-4534-bb81-6ce4fd82e9c2',
+        locationId: '2dc6e816-5599-4bd0-a690-74a5b5d05eeb',
       }
     ]);
   },

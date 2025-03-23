@@ -21,7 +21,21 @@ const swaggerOptions = {
               "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
             },
             "version": "1.0.1"
-          },          
+          },     
+          components: {
+            securitySchemes: {
+              bearerAuth: {
+                type: "http",
+                scheme: "bearer",
+                bearerFormat: "JWT"
+              }
+            }
+          },     
+          security: [ 
+            {
+              bearerAuth: []
+            }
+          ],           
         servers: [
             {
 
