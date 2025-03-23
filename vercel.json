@@ -18,5 +18,9 @@
             "source": "/reports/(.*)",
             "destination": "/app/server.js"
         }
-    ]
+    ],
+    "env": {
+        "JWT_SECRET": "011fdb592eb0abd61db08c0d30bc0a19b58d7c49043828fea8a05e445b02271c506ca00ada9823a3881768f40c50d101d684833c244a0d89c66b712369d33dee",
+        "JWT_REFRESH_SECRET": "dbf8a64a4365af0f95a940743fe76c1a3faff078a6d3b20ea1673f495c6d7c98ffb991251d11718ddddb99c9b1c3282bbeee1bd7e1465ede28ef97930ff08b86"
+    }
 }
