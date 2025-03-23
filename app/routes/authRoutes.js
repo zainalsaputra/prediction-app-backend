@@ -1,5 +1,8 @@
 const express = require('express');
-const AuthenticationController = require('../controllers/authenticationControllers');
+
+const { loginLimiter } = require('../middleware/rateLimit');
+
+const AuthController = require('../controllers/authControllers');
 
 const router = express.Router();
 
@@ -52,7 +55,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request (missing or invalid data)
  */
-router.post('/register', AuthenticationController.register);
+router.post('/register', AuthController.register);
 
 /**
  * @swagger
@@ -83,7 +86,7 @@ router.post('/register', AuthenticationController.register);
  *       401:
  *         description: Unauthorized (invalid email or password)
  */
-router.post('/login', AuthenticationController.login);
+router.post('/login', loginLimiter, AuthController.login);
 
 /**
  * @swagger
@@ -121,53 +124,6 @@ router.post('/login', AuthenticationController.login);
  *       401:
  *         description: Unauthorized (invalid or expired refresh token)
  */
-router.post('/refresh', AuthenticationController.refreshToken);
-
-/**
- * @swagger
- * /auth/users:
- *   get:
- *     summary: Get all users with location (for testing - unauthorized)
- *     description: Retrieve a list of all registered users (admin only).
- *     tags:
- *       - Authentications
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Successfully retrieved user list
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                         format: uuid
- *                         example: "b077733d-e727-4cd5-8a6c-88f98f59d7b2"
- *                       name:
- *                         type: string
- *                         example: "John Doe"
- *                       email:
- *                         type: string
- *                         example: "johndoe@example.com"
- *                       role:
- *                         type: string
- *                         example: "admin"
- *       401:
- *         description: Unauthorized (token missing or invalid)
- *       500:
- *         description: Internal server error
- */
-router.get('/users', AuthenticationController.getAllUsers);
-
+router.post('/refresh', AuthController.refreshToken);
 
 module.exports = router;

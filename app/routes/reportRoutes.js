@@ -2,6 +2,7 @@ const express = require('express');
 const reportControllers = require('../controllers/reportControllers');
 const router = express.Router();
 const imageUploader = require('../middleware/imageUploader');
+// const roleMiddleware = require('../middleware/roleMiddleware')
 
 /**
  * @swagger

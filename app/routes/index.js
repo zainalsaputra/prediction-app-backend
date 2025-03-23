@@ -10,7 +10,8 @@ const reportRoutes = require('./reportRoutes');
 const postReportRoutes = require('./postReportRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const statisticRoutes = require('./statisticRoutes');
-const authenticationRoutes = require('./authenticationRoutes');
+const authRoutes = require('./authRoutes');
+const usersRoutes = require('./usersRoutes');
 
 router.get('/', (req, res) => {
   res.send({
@@ -19,11 +20,18 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/auth', authenticationRoutes);
-router.use('/predict', predictRoutes);
-router.use('/reports', authMiddleware, roleMiddleware(['user']), reportRoutes);
-router.use('/post/reports', authMiddleware, roleMiddleware(['user']), postReportRoutes);
-router.use('/notifications', authMiddleware, roleMiddleware(['user']), notificationRoutes);
-router.use('/statistics', authMiddleware, roleMiddleware(['user']), statisticRoutes);
+router.use('/auth', authRoutes);
+
+router.use('/predict', authMiddleware, roleMiddleware(['admin']), predictRoutes);
+
+router.use('/reports', authMiddleware, roleMiddleware(['admin', 'user']), reportRoutes);
+
+router.use('/post/reports', authMiddleware, roleMiddleware(['admin', 'user']), postReportRoutes);
+
+router.use('/notifications', authMiddleware, roleMiddleware(['admin', 'user']), notificationRoutes);
+
+router.use('/statistics', authMiddleware, roleMiddleware(['admin', 'user']), statisticRoutes);
+
+router.use('/users', authMiddleware, roleMiddleware(['admin']), usersRoutes);
 
 module.exports = router;

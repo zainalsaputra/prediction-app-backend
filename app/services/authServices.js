@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { Roles, Users, Locations } = require('../models');
 const createError = require('http-errors');
 
-class AuthenticationServices {
+class AuthServices {
     static async register(userData) {
         const { name, email, password, roleId, province, district, subdistrict, village } = userData;
 
@@ -77,4 +77,4 @@ class AuthenticationServices {
     }
 }
 
-module.exports = AuthenticationServices;
+module.exports = AuthServices;

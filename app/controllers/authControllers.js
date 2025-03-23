@@ -2,7 +2,7 @@
 // const jwt = require('jsonwebtoken');
 // const UsersServices = require('../services/usersServices');
 
-// class AuthenticationControllers {
+// class AuthControllers {
 //   static async register(req, res) {
 //     try {
 //       const errors = validationResult(req);
@@ -221,16 +221,93 @@
 //   }
 // }
 
-// module.exports = AuthenticationControllers;
+// module.exports = AuthControllers;
 
 
-const AuthenticationServices = require('../services/authenticationServices');
+// const AuthServices = require('../services/authServices');
+// const createError = require('http-errors');
+
+// class AuthController {
+//     static async register(req, res, next) {
+//         try {
+//             const newUser = await AuthServices.register(req.body);
+//             return res.status(201).json({
+//                 status: 'success',
+//                 message: 'User registered successfully!',
+//                 data: newUser
+//             });
+//         } catch (error) {
+//             next(error);
+//         }
+//     }
+
+//     static async login(req, res, next) {
+//         try {
+//             const { email, password } = req.body;
+//             if (!email || !password) {
+//                 return next(createError(400, 'Email and password are required'));
+//             }
+
+//             const response = await AuthServices.login(email, password);
+//             return res.status(200).json({
+//                 status: 'success',
+//                 message: 'Login successful!',
+//                 response
+//             });
+//         } catch (error) {
+//             next(error);
+//         }
+//     }
+
+//     static async refreshToken(req, res, next) {
+//         try {
+//             const { refreshToken } = req.body;
+//             if (!refreshToken) return next(createError(401, 'Refresh Token required'));
+
+//             const user = await AuthServices.refreshToken(refreshToken);
+//             if (!user) return next(createError(403, 'Invalid Refresh Token'));
+
+//             jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
+//                 if (err) return next(createError(403, 'Invalid Refresh Token'));
+
+//                 const newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//                 res.json({ accessToken: newAccessToken });
+//             });
+
+//         } catch (error) {
+//             next(error);
+//         }
+//     }
+
+//     static async getAllUsers(req, res, next) {
+//         try {
+//             const usersData = await AuthServices.getAllUsers();
+
+//             res.status(200).json({
+//                 status: 'success',
+//                 data: usersData,
+//             });
+//         } catch (error) {
+//             next(error);
+//         }
+//     }
+
+// }
+
+// module.exports = AuthController;
+
+
+const AuthServices = require('../services/authServices');
 const createError = require('http-errors');
+const { registerSchema, loginSchema, refreshTokenSchema } = require('../validations/authValidations');
 
-class AuthenticationController {
+class AuthController {
     static async register(req, res, next) {
         try {
-            const newUser = await AuthenticationServices.register(req.body);
+            const { error } = registerSchema.validate(req.body);
+            if (error) return next(createError(400, error.details[0].message));
+
+            const newUser = await AuthServices.register(req.body);
             return res.status(201).json({
                 status: 'success',
                 message: 'User registered successfully!',
@@ -243,12 +320,11 @@ class AuthenticationController {
 
     static async login(req, res, next) {
         try {
-            const { email, password } = req.body;
-            if (!email || !password) {
-                return next(createError(400, 'Email and password are required'));
-            }
+            const { error } = loginSchema.validate(req.body);
+            if (error) return next(createError(400, error.details[0].message));
 
-            const response = await AuthenticationServices.login(email, password);
+            const { email, password } = req.body;
+            const response = await AuthServices.login(email, password);
             return res.status(200).json({
                 status: 'success',
                 message: 'Login successful!',
@@ -261,10 +337,11 @@ class AuthenticationController {
 
     static async refreshToken(req, res, next) {
         try {
-            const { refreshToken } = req.body;
-            if (!refreshToken) return next(createError(401, 'Refresh Token required'));
+            const { error } = refreshTokenSchema.validate(req.body);
+            if (error) return next(createError(400, error.details[0].message));
 
-            const user = await AuthenticationServices.refreshToken(refreshToken);
+            const { refreshToken } = req.body;
+            const user = await AuthServices.refreshToken(refreshToken);
             if (!user) return next(createError(403, 'Invalid Refresh Token'));
 
             jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
@@ -279,9 +356,10 @@ class AuthenticationController {
         }
     }
 
+
     static async getAllUsers(req, res, next) {
         try {
-            const usersData = await AuthenticationServices.getAllUsers();
+            const usersData = await AuthServices.getAllUsers();
 
             res.status(200).json({
                 status: 'success',
@@ -294,4 +372,4 @@ class AuthenticationController {
 
 }
 
-module.exports = AuthenticationController;
+module.exports = AuthController;
