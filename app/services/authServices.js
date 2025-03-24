@@ -46,7 +46,7 @@ class AuthServices {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) throw createError(401, 'Invalid email or password');
 
-        console.log("JWT_SECRET:", process.env.JWT_SECRET);
+        // console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
         const accessToken = jwt.sign(
             { id: user.id, role: user.role.name },
