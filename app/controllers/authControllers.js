@@ -298,6 +298,7 @@
 
 
 const AuthServices = require('../services/authServices');
+const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const { registerSchema, loginSchema, refreshTokenSchema } = require('../validations/authValidations');
 

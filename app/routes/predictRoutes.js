@@ -9,7 +9,7 @@ const predictUploader = require('../middleware/predictUploader');
  * @swagger
  * /predict:
  *   post:
- *     summary: Unggah gambar untuk prediksi
+ *     summary: Unggah gambar untuk prediksi [closed]
  *     description: Endpoint untuk mengunggah file gambar dan mendapatkan hasil prediksi.
  *     tags:
  *       - Prediction

@@ -72,8 +72,8 @@ io.on('connection', (socket) => {
 
 app.set('socketio', io);
 
-// setInterval(() => {
-//   console.log('Connected users:', io.sockets.adapter.rooms);
-// }, 10000);
+setInterval(() => {
+  console.log('Users connected to socket:', io.sockets.adapter.rooms);
+}, 15000);
 
 module.exports = app;

@@ -114,7 +114,7 @@ router.get('/:id/status', roleMiddleware(['user','admin']), PostReportsControlle
  * @swagger
  * /post/reports/{id}/status:
  *   patch:
- *     summary: Update post report status
+ *     summary: Update post report status [admin]
  *     description: Change the status of a post report (Pending, Reviewed, Resolved).
  *     tags:
  *       - Post Reports
@@ -125,7 +125,7 @@ router.get('/:id/status', roleMiddleware(['user','admin']), PostReportsControlle
  *           type: string
  *           format: uuid
  *         required: true
- *         description: The ID of the post report to update
+ *         description: The ID of the post report to update [admin]
  *     requestBody:
  *       required: true
  *       content:
@@ -153,7 +153,7 @@ router.patch('/:id/status', roleMiddleware(['admin']), PostReportsController.upd
  * @swagger
  * /post/reports/{id}:
  *   delete:
- *     summary: Delete a post report
+ *     summary: Delete a post report [admin]
  *     description: Remove a post report from the system.
  *     tags:
  *       - Post Reports
@@ -164,7 +164,7 @@ router.patch('/:id/status', roleMiddleware(['admin']), PostReportsController.upd
  *           type: string
  *           format: uuid
  *         required: true
- *         description: The ID of the post report to delete
+ *         description: The ID of the post report to delete [admin]
  *     responses:
  *       200:
  *         description: Post report deleted successfully

@@ -287,7 +287,7 @@ router.put('/:id', (req, res, next) => {
  * @swagger
  * /reports/{id}/type-report:
  *   patch:
- *     summary: Update only the type of a report
+ *     summary: Update only the type of a report [admin]
  *     tags:
  *       - Reports
  *     parameters:
@@ -320,7 +320,7 @@ router.patch('/:id/type-report', roleMiddleware(['admin']), reportControllers.up
  * @swagger
  * /reports/{id}:
  *   delete:
- *     summary: Delete a report
+ *     summary: Delete a report [admin]
  *     tags:
  *       - Reports
  *     parameters:
