@@ -46,9 +46,15 @@ setupSwagger(app);
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on PORT : ${PORT}`);
-});
+if (process.env.NODE_ENV == 'production') {
+  server.listen(3000, '0.0.0.0', () => {
+    console.log('Server running on 0.0.0.0:3000');
+  });
+} else {
+  server.listen(PORT, () => {
+    console.log(`Server is running on PORT : ${PORT}`);
+  });
+}
 
 const db = require('./models');
 
