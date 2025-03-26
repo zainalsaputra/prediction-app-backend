@@ -17,9 +17,6 @@ const io = socketIo(server, {
 
 app.set("trust proxy", 1);
 
-const helmet = require("helmet");
-app.use(helmet());
-
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -44,11 +41,14 @@ app.use(errorHandler);
 
 setupSwagger(app);
 
+const helmet = require("helmet");
+app.use(helmet());
+
 const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV == 'production') {
-  server.listen(3000, '0.0.0.0', () => {
-    console.log('Server running on 0.0.0.0:3000');
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on 0.0.0.0:${PORT}`);
   });
 } else {
   server.listen(PORT, () => {

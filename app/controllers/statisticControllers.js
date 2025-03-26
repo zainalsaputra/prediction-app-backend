@@ -36,7 +36,7 @@ class StatisticControllers {
 
             const location = [value.village, value.subdistrict, value.district, value.province]
             .filter(Boolean) // ambil nilai yang ada (tidak undefined/null)
-            .join(', '); 
+            .join(', ') || "all"; 
             
             if (Object.keys(formattedData).length === 0) {
                 return res.status(404).json({
@@ -47,7 +47,8 @@ class StatisticControllers {
 
             return res.status(200).json({
                 status: 'success',
-                data: formattedData
+                data: formattedData,
+                message: `Reports location data from ${location} area.`
             });
 
         } catch (error) {
