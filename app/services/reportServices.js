@@ -192,26 +192,26 @@ class ReportsService {
     if (village) filterConditions.village = village;
 
     const reports = await Reports.findAll({
-        include: [
-            {
-                model: Locations,
-                as: 'location',
-                where: filterConditions,
-                attributes: [],
-            },
-        ],
-        attributes: [
-            'type_report',
-            [Sequelize.fn('COUNT', Sequelize.col('type_report')), 'count']
-        ],
-        group: ['type_report']
+      include: [
+        {
+          model: Locations,
+          as: 'location',
+          where: filterConditions,
+          attributes: [],
+        },
+      ],
+      attributes: [
+        'type_report',
+        [Sequelize.fn('COUNT', Sequelize.col('type_report')), 'count']
+      ],
+      group: ['type_report']
     });
 
     return reports.map(r => ({
-        category: r.type_report,
-        count: r.getDataValue('count')
+      category: r.type_report,
+      count: r.getDataValue('count')
     }));
-}
+  }
 
 
 }

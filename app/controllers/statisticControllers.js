@@ -56,6 +56,7 @@ class StatisticControllers {
         }
     }
 
+    
 }
 
 module.exports = StatisticControllers;
