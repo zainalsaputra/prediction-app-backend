@@ -14,10 +14,10 @@
 -   Sequelize ORM
 -   sequelize-cli
 -   ESLint
--   Amazon Web Services
--   Vercel
+-   Amazon Web Services (AWS)
+-   Vercel (for development pre-production)
 -   Cloudinary
--   Swagger (bug interfaces on vercel)
+-   Swagger
 -   Multer
 -   Axios
 -   Nodemon
@@ -25,8 +25,15 @@
 -   Joi
 -   Moment
 -   Socket.io
--   Helmet 
+-   Helmet (Request security)
 -   express-rate-limit
+-   jsonwebtoken (JWT)
+-   bcryptjs
+-   PM2 (Process Management)
+-   Nginx (Reverse Proxy)
+-   Certbot (SSL/TLS HTTPS)
+-   Crontab (Auto SSL Renewal)
+
 
 ### **AI Server**
 
@@ -34,16 +41,37 @@
 -   FastAPI (include Swagger documentation)
 -   Firebase
 
+### **RDBMS Cloud Server**
+
+-   Neon Tech
+
+### **Images Cloud Server**
+
+-   Cloudinary
+
+### **Deployment Infrastructure (AWS)**
+
+-   **AWS EC2**
+-   **AWS Route53**
+-   **Nginx** (
+-   **Node.js v20.10.0**
+-   **PM2** 
+-   **Certbot**
+-   **Crontab**
+-   **PostgreSQL Database Hosted on Neon Tech**
+-   **Cloudinary for Image Storage**
+
 ## **Features**
 
-### **Authentication & Authorization**
+### **Authentication & Authorizations**
 
--   **Register** with user location (Province, District, Subdistrict, Village)
+-   **Register**
 -   **Login with JWT Authentication**
+-   **Logout & Invalidate Refresh Token**
 -   **Refresh Token for Secure Sessions**
--   **Role-Based Access Control (RBAC)** for Users and Admins
--   **Middleware for Authorization & Authentication**
--   **Rate Limiting** to prevent brute force attacks
+-   **Role-Based Access Control (RBAC)**
+-   **Middleware for Authentication & Authorization**
+-   **Rate Limiting** 
 -   **Helmet for securing API requests**
 
 ### **Prediction Features**
@@ -69,7 +97,7 @@
 -   **Create Post Reports based on Reports**
 -   **Get All Post Reports with Filters**
 -   **Check Status of a Post Report**
--   **Update Post Report Status** (Pending, Reviewed, Resolved)
+-   **Update Post Report Status**
 -   **Delete Post Report**
 
 ### **Notification System**
@@ -85,6 +113,7 @@
 -   **Emit Notification when a Post Report is Created**
 -   **Emit Notification when a Post Report Status is Updated**
 -   **Users Join WebSocket Rooms Based on User ID**
+-   **Optimized WebSocket for Better Performance**
 
 ### **Filtering & Sorting**
 
@@ -96,8 +125,7 @@
 
 -   **Generate Statistical Data for Reports**
 -   **Filter Statistics by Location (Province, District, Subdistrict, Village)**
--   **Show Count of Reports by Type (Jalan Rusak, Bencana, etc.)**
--   **Swagger API Documentation for Statistics**
+-   **Show Count of Reports by Type (Jalan Rusak, Bencana, dll.)**
 
 ### **API Documentation (Swagger)**
 
@@ -118,6 +146,10 @@
 -   **Implement Role-Based Access Control (RBAC)**
 -   **Enhance API Security with Helmet & Rate Limiting**
 -   **WebSocket Notification System for Real-time Updates**
+-   **Forgot Password & Reset Password Implementation**
+-   **Optimized WebSocket Performance for Real-time Features**
+-   **Implemented Logout API with Refresh Token Invalidation**
+-   **Successfully Deployed Application to AWS with SSL/TLS Security**
 
 ## **RDMS Extension**
 
@@ -125,8 +157,8 @@
 
 ## **Todo**
 
--   **User Based on Location Statistics Feature**
--   **Forgot Password & Reset Password Feature**
+-   **Advanced Analytics for Reports**
+-   **Enhanced AI Integration for Report Analysis**
 -   **Further Optimization & Performance Improvements**
 -   **Enhanced Logging & Monitoring**
 -   **Releases Deployments with AWS**
