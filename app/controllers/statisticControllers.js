@@ -35,20 +35,27 @@ class StatisticControllers {
             // }
 
             const location = [value.village, value.subdistrict, value.district, value.province]
-            .filter(Boolean) // ambil nilai yang ada (tidak undefined/null)
-            .join(', ') || "all"; 
-            
+                .filter(Boolean) // ambil nilai yang ada (tidak undefined/null)
+                .join(', ') || "all";
+
             if (Object.keys(formattedData).length === 0) {
                 return res.status(404).json({
-                    status: 'Not Found',
-                    message:`There are no reports found in ${location || "the selected"} area.`
+                    status: 'success',
+                    message: `There are no reports found in ${location || "the selected"} area.`,
+                    data: {
+                        "Bangunan Roboh": 0,
+                        "Bangunan Rusak": 0,
+                        "Jalan Rusak": 0,
+                        "Jembatan Rusak": 0,
+                        "Sampah Berserakan": 0
+                    },
                 });
             }
 
             return res.status(200).json({
                 status: 'success',
+                message: `Reports location data from ${location} area.`,
                 data: formattedData,
-                message: `Reports location data from ${location} area.`
             });
 
         } catch (error) {

@@ -186,10 +186,10 @@ class ReportsService {
   static async getReportStatistics({ province, district, subdistrict, village }) {
     let filterConditions = {};
 
-    if (province) filterConditions.province = province;
-    if (district) filterConditions.district = district;
-    if (subdistrict) filterConditions.subdistrict = subdistrict;
-    if (village) filterConditions.village = village;
+    if (province) filterConditions.province = { [Op.iLike]: `${province}` };
+    if (district) filterConditions.district = { [Op.iLike]: `${district}` };
+    if (subdistrict) filterConditions.subdistrict = { [Op.iLike]: `${subdistrict}` };
+    if (village) filterConditions.village = { [Op.iLike]: `${village}` };
 
     const reports = await Reports.findAll({
         include: [
