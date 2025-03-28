@@ -39,7 +39,7 @@ class StatisticControllers {
                 .join(', ') || "all";
 
             if (Object.keys(formattedData).length === 0) {
-                return res.status(404).json({
+                return res.status(200).json({
                     status: 'success',
                     message: `There are no reports found in ${location || "the selected"} area.`,
                     data: {
