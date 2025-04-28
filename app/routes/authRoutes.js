@@ -125,6 +125,38 @@ router.post('/login', loginLimiter, AuthController.login);
  *         description: Unauthorized (invalid or expired refresh token)
  */
 router.post('/refresh', AuthController.refreshToken);
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     description: Revoke the refresh token and log out the user.
+ *     tags:
+ *       - Authentications
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token to be revoked
+ *                 example: "eyJhbGciOiJIUzI1..."
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Successfully logged out"
+ *       400:
+ *         description: Bad request (missing or invalid refresh token)
+ *       401:
+ *         description: Unauthorized (invalid refresh token)
+ */
+router.post('/logout', AuthController.logout);
 
 /**
  * @swagger

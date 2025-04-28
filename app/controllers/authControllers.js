@@ -358,6 +358,19 @@ class AuthController {
         }
     }
 
+    static logout = async (req, res, next) => {
+        try {
+            const { error } = refreshTokenSchema.validate(req.body);
+            if (error) return next(createError(400, error.details[0].message));
+
+            const { refreshToken } = req.body;
+            const response = await AuthServices.logout(refreshToken);
+
+            return res.status(200).json(response);
+        } catch (error) {
+            next(error);
+        }
+    };
 
     static async getAllUsers(req, res, next) {
         try {

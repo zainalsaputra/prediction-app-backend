@@ -70,6 +70,18 @@ class AuthServices {
         return await Users.findOne({ where: { refreshToken } });
     }
 
+    static async logout(refreshToken) {
+        if (!refreshToken) throw createError(400, 'Refresh Token is required');
+
+        const user = await Users.findOne({ where: { refreshToken } });
+        if (!user) throw createError(401, 'Invalid Refresh Token');
+
+        user.refreshToken = null;
+        await user.save();
+
+        return { message: 'Successfully logged out' };
+    }
+
     static async getAllUsers() {
         return await Users.findAll({
             include: [
