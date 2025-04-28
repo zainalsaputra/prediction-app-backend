@@ -126,4 +126,59 @@ router.post('/login', loginLimiter, AuthController.login);
  */
 router.post('/refresh', AuthController.refreshToken);
 
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Request password reset
+ *     description: Send password reset email if the user exists
+ *     tags:
+ *       - Authentications
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "user@example.com"
+ *     responses:
+ *       200:
+ *         description: Password reset email sent
+ *       400:
+ *         description: Bad request (invalid email)
+ */
+router.post('/forgot-password', AuthController.forgotPassword);
+
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     description: Reset user password using token
+ *     tags:
+ *       - Authentications
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: Reset token
+ *               newPassword:
+ *                 type: string
+ *                 description: New password
+ *     responses:
+ *       200:
+ *         description: Password reset successful
+ *       400:
+ *         description: Invalid token or password format
+ */
+router.post('/reset-password', AuthController.resetPassword);
+
 module.exports = router;

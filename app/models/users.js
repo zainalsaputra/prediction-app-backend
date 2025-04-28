@@ -46,6 +46,14 @@ class Users extends Model {
           allowNull: true,
           type: DataTypes.TEXT,
         },
+        resetPasswordToken: {
+          allowNull: true,
+          type: DataTypes.STRING,
+        },
+        resetPasswordExpires: {
+          allowNull: true,
+          type: DataTypes.DATE,
+        },
         roleId: {
           allowNull: false,
           type: DataTypes.INTEGER,

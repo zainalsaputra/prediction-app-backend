@@ -104,6 +104,7 @@ class UsersServices {
     const user = await Users.findOne({ where: { id: user_id } });
     return user !== null;
   }
+  
 }
 
 module.exports = UsersServices;
