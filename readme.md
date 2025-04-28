@@ -13,7 +13,7 @@
   [https://fixkan-api.zainal-saputra.click](https://fixkan-api.zainal-saputra.click)
 
 - **Backup API Server (Vercel Deployment):**  
-  [https://sec-prediction-app-backend.vercel.app](https://sec-prediction-app-backend.vercel.app)
+  [https://sec-prediction-app-backend.vercel.app](https://sec-prediction-app-backend.vercel.app) - bug documentation interface on vercel
 
 ## **Tools**
 
@@ -167,4 +167,4 @@
 - Further Backend and WebSocket Optimizations
 - Enhanced Logging and Error Monitoring
 - CI/CD Integration for Automated AWS Deployments
-- All Feature Admin Dashboard
+- Features Role Admin & Dashboard
