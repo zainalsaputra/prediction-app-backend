@@ -118,6 +118,43 @@ class AuthServices {
             ]
         });
     }
+
+    static async findUserByEmailOnly(email) {
+        return await Users.findOne({ where: { email } });
+    }
+
+    static async updateResetPasswordToken(userId, token, expires) {
+        return await Users.update(
+            {
+                resetPasswordToken: token,
+                resetPasswordExpires: new Date(expires),
+            },
+            {
+                where: { id: userId },
+            }
+        );
+    }
+
+    static async findUserByResetToken(token) {
+        return await Users.findOne({
+            where: { resetPasswordToken: token },
+        });
+    }
+
+    static async updatePassword(userId, newPassword) {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        return await Users.update(
+            {
+                password: hashedPassword,
+                resetPasswordToken: null,
+                resetPasswordExpires: null,
+            },
+            {
+                where: { id: userId },
+            }
+        );
+    }
+
 }
 
 module.exports = AuthServices;

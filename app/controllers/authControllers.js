@@ -299,7 +299,9 @@
 
 const AuthServices = require('../services/authServices');
 const createError = require('http-errors');
+const crypto = require('crypto');
 const { registerSchema, loginSchema, refreshTokenSchema } = require('../validations/authValidations');
+const transporter = require('../config/nodemailer');
 
 class AuthController {
     static async register(req, res, next) {
@@ -372,6 +374,83 @@ class AuthController {
             res.status(200).json({
                 status: 'success',
                 data: usersData,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async forgotPassword(req, res, next) {
+        try {
+            const { email } = req.body;
+            if (!email) return next(createError(400, 'Email is required'));
+
+            const user = await AuthServices.findUserByEmailOnly(email);
+            if (!user) return next(createError(404, 'User not found'));
+
+            // Buat token reset password
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            const resetTokenExpire = Date.now() + 3600000; // 1 jam dari sekarang
+
+            // Simpan token di DB
+            await AuthServices.updateResetPasswordToken(user.id, resetToken, resetTokenExpire);
+
+            // Kirim email
+            const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+            const mailOptions = {
+                from: `"Support Team" <${process.env.EMAIL_USER}>`,
+                to: user.email,
+                subject: '🔒 Reset Your Password',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                        <h2 style="color: #333;">Password Reset Request</h2>
+                        <p style="color: #555;">
+                            We received a request to reset your password. Click the button below to proceed:
+                        </p>
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="${resetUrl}" style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-size: 16px;">
+                                Reset Password
+                            </a>
+                        </div>
+                        <p style="color: #999; font-size: 14px;">
+                            This link will expire in 1 hour. If you did not request a password reset, please ignore this email.
+                        </p>
+                        <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+                        <p style="color: #bbb; font-size: 12px; text-align: center;">
+                            &copy; ${new Date().getFullYear()} FixKan Application. All rights reserved.
+                        </p>
+                    </div>
+                `,
+            };
+            
+            await transporter.sendMail(mailOptions);
+
+            res.status(200).json({
+                status: 'success',
+                message: 'Reset password email sent',
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async resetPassword(req, res, next) {
+        try {
+            const { token, newPassword } = req.body;
+            if (!token || !newPassword) return next(createError(400, 'Token and new password are required'));
+
+            const user = await AuthServices.findUserByResetToken(token);
+            if (!user) return next(createError(400, 'Invalid or expired reset token'));
+
+            if (user.resetPasswordExpires < Date.now()) {
+                return next(createError(400, 'Reset token expired'));
+            }
+
+            await AuthServices.updatePassword(user.id, newPassword);
+
+            res.status(200).json({
+                status: 'success',
+                message: 'Password updated successfully',
             });
         } catch (error) {
             next(error);
