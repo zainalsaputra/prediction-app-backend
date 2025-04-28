@@ -67,7 +67,36 @@ class AuthServices {
     }
 
     static async refreshToken(refreshToken) {
-        return await Users.findOne({ where: { refreshToken } });
+        try {
+            const user = await Users.findOne({
+                where: { refreshToken },
+                include: [{ model: Roles, as: 'role' }]
+            });
+
+            if (!user) throw createError(403, 'Invalid Refresh Token');
+
+            const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+            if (!decoded) throw createError(403, 'Invalid Refresh Token');
+
+            const newAccessToken = jwt.sign(
+                { id: user.id, role: user.role.name },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+
+            const newRefreshToken = jwt.sign(
+                { id: user.id },
+                process.env.JWT_REFRESH_SECRET,
+                { expiresIn: '7d' }
+            );
+
+            user.refreshToken = newRefreshToken;
+            await user.save();
+
+            return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+        } catch (error) {
+            throw createError(403, 'Invalid Refresh Token');
+        }
     }
 
     static async logout(refreshToken) {

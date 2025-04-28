@@ -17,9 +17,6 @@ const io = socketIo(server, {
 
 app.set("trust proxy", 1);
 
-const helmet = require("helmet");
-app.use(helmet());
-
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -44,11 +41,20 @@ app.use(errorHandler);
 
 setupSwagger(app);
 
+const helmet = require("helmet");
+app.use(helmet());
+
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on PORT : ${PORT}`);
-});
+if (process.env.NODE_ENV == 'production') {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on 0.0.0.0:${PORT}`);
+  });
+} else {
+  server.listen(PORT, () => {
+    console.log(`Server is running on PORT : ${PORT}`);
+  });
+}
 
 const db = require('./models');
 
@@ -72,8 +78,8 @@ io.on('connection', (socket) => {
 
 app.set('socketio', io);
 
-// setInterval(() => {
-//   console.log('Connected users:', io.sockets.adapter.rooms);
-// }, 10000);
+setInterval(() => {
+  console.log('Users connected to socket:', io.sockets.adapter.rooms);
+}, 15000);
 
 module.exports = app;

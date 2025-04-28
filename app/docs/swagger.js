@@ -1,7 +1,7 @@
+require('dotenv').config();
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const express = require("express");
-require('dotenv').config();
 
 const swaggerOptions = {
     definition: {
@@ -39,7 +39,7 @@ const swaggerOptions = {
         servers: [
             {
 
-                url: process.env.BASE_URL || "https://sec-prediction-app-backend.vercel.app",
+                url: process.env.BASE_URL,
               
             },
         ],

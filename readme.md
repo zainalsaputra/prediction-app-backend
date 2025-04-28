@@ -69,6 +69,26 @@
 - **PostgreSQL Database Hosted on Neon Tech**
 - **Cloudinary for Image Storage**
 
+### **RDBMS Cloud Server**
+
+-   Neon Tech
+
+### **Images Cloud Server**
+
+-   Cloudinary
+
+### **Deployment Infrastructure (AWS)**
+
+-   **AWS EC2**
+-   **AWS Route53**
+-   **Nginx** (
+-   **Node.js v20.10.0**
+-   **PM2** 
+-   **Certbot**
+-   **Crontab**
+-   **PostgreSQL Database Hosted on Neon Tech**
+-   **Cloudinary for Image Storage**
+
 ## **Features**
 
 ### **Authentication & Authorizations**

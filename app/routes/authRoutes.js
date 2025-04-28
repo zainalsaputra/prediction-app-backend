@@ -13,7 +13,7 @@ const router = express.Router();
  *     summary: Register a new user with location
  *     description: Register a new user with their location details.
  *     tags:
- *       - Authentications
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -64,7 +64,7 @@ router.post('/register', AuthController.register);
  *     summary: Login user
  *     description: Authenticate user and receive an access token.
  *     tags:
- *       - Authentications
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -95,7 +95,7 @@ router.post('/login', loginLimiter, AuthController.login);
  *     summary: Refresh Access Token
  *     description: Get a new access token using a refresh token.
  *     tags:
- *       - Authentications
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -212,5 +212,38 @@ router.post('/forgot-password', AuthController.forgotPassword);
  *         description: Invalid token or password format
  */
 router.post('/reset-password', AuthController.resetPassword);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     description: Revoke the refresh token and log out the user.
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token to be revoked
+ *                 example: "eyJhbGciOiJIUzI1..."
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Successfully logged out"
+ *       400:
+ *         description: Bad request (missing or invalid refresh token)
+ *       401:
+ *         description: Unauthorized (invalid refresh token)
+ */
+router.post('/logout', AuthController.logout);
 
 module.exports = router;

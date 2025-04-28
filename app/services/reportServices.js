@@ -186,25 +186,33 @@ class ReportsService {
   static async getReportStatistics({ province, district, subdistrict, village }) {
     let filterConditions = {};
 
-    if (province) filterConditions.province = province;
-    if (district) filterConditions.district = district;
-    if (subdistrict) filterConditions.subdistrict = subdistrict;
-    if (village) filterConditions.village = village;
+    if (province) filterConditions.province = { [Op.iLike]: `${province}` };
+    if (district) filterConditions.district = { [Op.iLike]: `${district}` };
+    if (subdistrict) filterConditions.subdistrict = { [Op.iLike]: `${subdistrict}` };
+    if (village) filterConditions.village = { [Op.iLike]: `${village}` };
 
     const reports = await Reports.findAll({
-      where: filterConditions,
-      attributes: [
-        'type_report',
-        [Sequelize.fn('COUNT', Sequelize.col('type_report')), 'count']
-      ],
-      group: ['type_report']
+        include: [
+            {
+                model: Locations,
+                as: 'location',
+                where: filterConditions,
+                attributes: [],
+            },
+        ],
+        attributes: [
+            'type_report',
+            [Sequelize.fn('COUNT', Sequelize.col('type_report')), 'count']
+        ],
+        group: ['type_report']
     });
 
     return reports.map(r => ({
-      category: r.type_report,
-      count: r.getDataValue('count')
+        category: r.type_report,
+        count: r.getDataValue('count')
     }));
-  }
+}
+
 
 }
 

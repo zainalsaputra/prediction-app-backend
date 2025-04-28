@@ -343,16 +343,11 @@ class AuthController {
             if (error) return next(createError(400, error.details[0].message));
 
             const { refreshToken } = req.body;
-            const user = await AuthServices.refreshToken(refreshToken);
-            if (!user) return next(createError(403, 'Invalid Refresh Token'));
+            const newAccessToken = await AuthServices.refreshToken(refreshToken);
 
-            jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
-                if (err) return next(createError(403, 'Invalid Refresh Token'));
-
-                const newAccessToken = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-                res.json({ accessToken: newAccessToken });
+            return res.status(200).json({
+                accessToken: newAccessToken
             });
-
         } catch (error) {
             next(error);
         }

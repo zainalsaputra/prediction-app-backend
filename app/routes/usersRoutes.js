@@ -8,8 +8,8 @@ const router = express.Router();
  * @swagger
  * /users:
  *   get:
- *     summary: Get all users with location (admin)
- *     description: Retrieve a list of all registered users (admin only).
+ *     summary: Get all users with location [admin]
+ *     description: Retrieve a list of all registered users.
  *     tags:
  *       - Administrators
  *     responses:
